@@ -39,12 +39,11 @@ import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 
-import im.bci.nanim.Nanim.Animation;
-import im.bci.nanim.Nanim.AnimationCollection;
-import im.bci.nanim.Nanim.PixelFormat;
-import im.bci.nanim.Nanim.AnimationCollection.Builder;
-import im.bci.nanim.Nanim.Frame;
-import im.bci.nanim.Nanim.Image;
+import im.bci.nanim.NanimParser.Animation;
+import im.bci.nanim.NanimParser.Nanim;
+import im.bci.nanim.NanimParser.PixelFormat;
+import im.bci.nanim.NanimParser.Frame;
+import im.bci.nanim.NanimParser.Image;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -57,7 +56,7 @@ import com.google.protobuf.ByteString;
 
 public class NanimEnc {
 
-	private AnimationCollection animationCollection;
+	private Nanim nanim;
 	private CommandLine commandLine;
 
 	public NanimEnc(CommandLine line) {
@@ -91,7 +90,7 @@ public class NanimEnc {
 		String output = commandLine.getOptionValue("o","output.nanim");
 		FileOutputStream os = new FileOutputStream(output);
 		try {
-			animationCollection.writeTo(os);
+			nanim.writeTo(os);
 			System.out.println("nanim successfully written to " + output);
 		} finally {
 			os.flush();
@@ -100,8 +99,8 @@ public class NanimEnc {
 	}
 
 	private void encode() throws IOException {
-		Builder animationCollectionBuilder = AnimationCollection.newBuilder();
-		im.bci.nanim.Nanim.Animation.Builder currentAnimationBuilder = null;
+		Nanim.Builder animationCollectionBuilder = Nanim.newBuilder();
+		Animation.Builder currentAnimationBuilder = null;
 		int currentDuration = 0;
 		LinkedHashMap<String, Image.Builder> images = new LinkedHashMap<String, Image.Builder>();
 		for (Option option : commandLine.getOptions()) {
@@ -139,7 +138,7 @@ public class NanimEnc {
 		if(null != license)
 			animationCollectionBuilder.setLicense(license);
 			
-		animationCollection = animationCollectionBuilder.build();
+		nanim = animationCollectionBuilder.build();
 	}
 
 	private Image.Builder encodeImage( File imageFile)
