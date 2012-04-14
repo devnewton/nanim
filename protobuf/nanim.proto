@@ -1,5 +1,7 @@
 package im.bci.nanim;
 
+option java_outer_classname = "NanimParser";
+
 message Frame {
     required string imageName = 1;
     required int32 duration = 2;
@@ -7,11 +9,13 @@ message Frame {
     required float v1 = 4;
     required float u2 = 5;
     required float v2 = 6;
+    extensions 1000 to max;
 }
 
 message Animation {
     required string name = 1;
     repeated Frame frames = 2;
+    extensions 1000 to max;
 }
 
 enum PixelFormat {
@@ -25,13 +29,15 @@ message Image {
     required int32 height = 3;
     required PixelFormat format = 4;
     required bytes pixels = 5;
+    extensions 1000 to max;
 }
 
-message AnimationCollection {
+message Nanim {
     repeated Image images = 1;
     repeated Animation animations = 2;
     optional string author = 3;
     optional string license = 4;
+    extensions 1000 to max;
 };
 
 
