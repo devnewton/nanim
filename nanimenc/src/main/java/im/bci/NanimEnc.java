@@ -35,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -102,6 +103,7 @@ public class NanimEnc {
 		Builder animationCollectionBuilder = AnimationCollection.newBuilder();
 		im.bci.nanim.Nanim.Animation.Builder currentAnimationBuilder = null;
 		int currentDuration = 0;
+		LinkedHashMap<String, Image.Builder> images = new LinkedHashMap<String, Image.Builder>();
 		for (Option option : commandLine.getOptions()) {
 			String optName = option.getOpt();
 			if (optName.equals("a")) {
@@ -120,12 +122,15 @@ public class NanimEnc {
 							.setImageName(imageFile.getName()).setU1(0.0f)
 							.setU2(1.0f).setV1(0.0f).setV2(1.0f);
 					currentAnimationBuilder.addFrames(frame);
-					encodeImage(animationCollectionBuilder, imageFile);
+					images.put(imageFile.getName(), encodeImage(imageFile)) ;
 				}
 			}
 		}
 		if(null != currentAnimationBuilder) {
 			animationCollectionBuilder.addAnimations(currentAnimationBuilder);
+		}
+		for(Image.Builder image : images.values()) {
+			animationCollectionBuilder.addImages(image);
 		}
 		String author = commandLine.getOptionValue("author");
 		if(null != author)
@@ -137,7 +142,7 @@ public class NanimEnc {
 		animationCollection = animationCollectionBuilder.build();
 	}
 
-	private void encodeImage(Builder animationCollectionBuilder, File imageFile)
+	private Image.Builder encodeImage( File imageFile)
 			throws IOException {
 		Image.Builder image = Image.newBuilder();
 		BufferedImage bufferedImage = ImageIO.read(imageFile);
@@ -152,7 +157,7 @@ public class NanimEnc {
 			image.setFormat(PixelFormat.RGB);
 			image.setPixels(ByteString.copyFrom(getRGBPixels(bufferedImage)));
 		}
-		animationCollectionBuilder.addImages(image);
+		return image;
 	}
 
 	public static byte[] getRGBAPixels(BufferedImage image) {
