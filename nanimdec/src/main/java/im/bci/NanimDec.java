@@ -74,7 +74,7 @@ public class NanimDec
 		BufferedImage outputImage = null;
 		switch(image.getFormat()) {
 		case RGBA:
-			outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+			outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			setRgba(outputImage, image);
 			break;
 		case RGB:
