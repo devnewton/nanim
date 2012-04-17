@@ -150,10 +150,10 @@ public class NanimEnc {
 		image.setHeight(bufferedImage.getHeight());
 
 		if (bufferedImage.getColorModel().hasAlpha()) {
-			image.setFormat(PixelFormat.RGBA);
+			image.setFormat(PixelFormat.RGBA_8888);
 			image.setPixels(ByteString.copyFrom(getRGBAPixels(bufferedImage)));
 		} else {
-			image.setFormat(PixelFormat.RGB);
+			image.setFormat(PixelFormat.RGB_888);
 			image.setPixels(ByteString.copyFrom(getRGBPixels(bufferedImage)));
 		}
 		return image;

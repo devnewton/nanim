@@ -19,8 +19,8 @@ message Animation {
 }
 
 enum PixelFormat {
-    RGB = 1;
-    RGBA = 2;
+    RGB_888 = 1;
+    RGBA_8888 = 2;
 }
 
 message Image {

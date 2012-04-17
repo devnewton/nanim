@@ -211,12 +211,12 @@ public class NanimView extends JFrame {
 	private void loadImage(Image image) throws IOException {
 		BufferedImage loadedImage = null;
 		switch (image.getFormat()) {
-		case RGBA:
+		case RGBA_8888:
 			loadedImage = new BufferedImage(image.getWidth(),
 					image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			setRgba(loadedImage, image);
 			break;
-		case RGB:
+		case RGB_888:
 			loadedImage = new BufferedImage(image.getWidth(),
 					image.getHeight(), BufferedImage.TYPE_INT_RGB);
 			setRgb(loadedImage, image);

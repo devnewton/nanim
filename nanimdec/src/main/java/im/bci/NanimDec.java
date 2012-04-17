@@ -73,11 +73,11 @@ public class NanimDec
 	private void saveImage(Image image) throws IOException {
 		BufferedImage outputImage = null;
 		switch(image.getFormat()) {
-		case RGBA:
+		case RGBA_8888:
 			outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 			setRgba(outputImage, image);
 			break;
-		case RGB:
+		case RGB_888:
 			outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 			setRgb(outputImage, image);
 			break;		
