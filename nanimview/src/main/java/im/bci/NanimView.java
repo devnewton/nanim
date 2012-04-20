@@ -32,6 +32,7 @@
 package im.bci;
 
 import im.bci.nanim.NanimParser;
+import im.bci.nanim.NanimParserUtils;
 import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Frame;
 import im.bci.nanim.NanimParser.Image;
@@ -59,8 +60,6 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-
-import com.google.protobuf.ByteString;
 
 /**
  * Hello world!
@@ -214,53 +213,14 @@ public class NanimView extends JFrame {
 		case RGBA_8888:
 			loadedImage = new BufferedImage(image.getWidth(),
 					image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			setRgba(loadedImage, image);
+			NanimParserUtils.setRgba(loadedImage, image);
 			break;
 		case RGB_888:
 			loadedImage = new BufferedImage(image.getWidth(),
 					image.getHeight(), BufferedImage.TYPE_INT_RGB);
-			setRgb(loadedImage, image);
+			NanimParserUtils.setRgb(loadedImage, image);
 			break;
 		}
 		loadedBufferedImages.put(image.getName(), loadedImage);
-	}
-
-	private void setRgba(BufferedImage outputImage, Image image) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		ByteString pixels = image.getPixels();
-		int pixelIndex = 0;
-		for (int x = 0; x < w; ++x) {
-			for (int y = 0; y < h; ++y) {
-				byte r = pixels.byteAt(pixelIndex++);
-				byte g = pixels.byteAt(pixelIndex++);
-				byte b = pixels.byteAt(pixelIndex++);
-				byte a = pixels.byteAt(pixelIndex++);
-
-				// ImageIO is just plain stupid...
-				if (a == 0) {
-					a = 1;
-				}
-
-				int rgba = (a << 24) + (r << 16) + (g << 8) + b;
-				outputImage.setRGB(x, y, rgba);
-			}
-		}
-	}
-
-	private void setRgb(BufferedImage outputImage, Image image) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		ByteString pixels = image.getPixels();
-		int pixelIndex = 0;
-		for (int x = 0; x < w; ++x) {
-			for (int y = 0; y < h; ++y) {
-				int r = pixels.byteAt(pixelIndex++);
-				int g = pixels.byteAt(pixelIndex++);
-				int b = pixels.byteAt(pixelIndex++);
-				int rgba = (r << 16) + (g << 8) + b;
-				outputImage.setRGB(x, y, rgba);
-			}
-		}
 	}
 }

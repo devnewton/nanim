@@ -44,6 +44,7 @@ import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParser.PixelFormat;
 import im.bci.nanim.NanimParser.Frame;
 import im.bci.nanim.NanimParser.Image;
+import im.bci.nanim.NanimParserUtils;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -151,52 +152,11 @@ public class NanimEnc {
 
 		if (bufferedImage.getColorModel().hasAlpha()) {
 			image.setFormat(PixelFormat.RGBA_8888);
-			image.setPixels(ByteString.copyFrom(getRGBAPixels(bufferedImage)));
+			image.setPixels(ByteString.copyFrom(NanimParserUtils.getRGBAPixels(bufferedImage)));
 		} else {
 			image.setFormat(PixelFormat.RGB_888);
-			image.setPixels(ByteString.copyFrom(getRGBPixels(bufferedImage)));
+			image.setPixels(ByteString.copyFrom(NanimParserUtils.getRGBPixels(bufferedImage)));
 		}
 		return image;
 	}
-
-	public static byte[] getRGBAPixels(BufferedImage image) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		byte[] pixels = new byte[w * h * 4];
-		int pixelIndex = 0;
-		for (int x = 0; x < w; ++x) {
-			for (int y = 0; y < h; ++y) {
-				int rgba = image.getRGB(x, y);
-				byte a = (byte) ((rgba >> 24) & 0xff);
-				byte r = (byte) ((rgba >> 16) & 0xff);
-				byte g = (byte) ((rgba >> 8) & 0xff);
-				byte b = (byte) (rgba & 0xff);
-				pixels[pixelIndex++] = r;
-				pixels[pixelIndex++] = g;
-				pixels[pixelIndex++] = b;
-				pixels[pixelIndex++] = a;
-			}
-		}
-		return pixels;
-	}
-	
-	public static byte[] getRGBPixels(BufferedImage image) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		byte[] pixels = new byte[w * h * 3];
-		int pixelIndex = 0;
-		for (int x = 0; x < w; ++x) {
-			for (int y = 0; y < h; ++y) {
-				int rgb = image.getRGB(x, y);
-				byte r = (byte) (((rgb & 0xff0000) >> 16) & 0xff);
-				byte g = (byte) (((rgb & 0xff00) >> 8) & 0xff);
-				byte b = (byte) (rgb & 0xff);
-				pixels[pixelIndex++] = r;
-				pixels[pixelIndex++] = g;
-				pixels[pixelIndex++] = b;
-			}
-		}
-		return pixels;
-	}
-
 }
