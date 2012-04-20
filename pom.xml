@@ -13,6 +13,8 @@
     <module>nanimparser</module>
     <module>nanimenc</module>
     <module>nanimdec</module>
+    <module>nanimview</module>
+    <module>nanimopt</module>
   </modules>
 </project>
 
