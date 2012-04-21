@@ -1,13 +1,14 @@
 package im.bci.binpacker;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class BinPackerIn {
 	
-	int textureWidth = 256;
-	int textureHeight = 256;
 	List<PackableImage> images = new ArrayList<PackableImage>();
+	Dimension textureDimension = new Dimension(256, 256);
 	
 	public BinPackerIn addImage(Object id, int width, int height) {
 		images.add(new PackableImage(id, width, height));
@@ -19,18 +20,13 @@ public class BinPackerIn {
 		return this;
 	}
 	
-	public int getTextureWidth() {
-		return textureWidth;
-	}
-	public BinPackerIn setTextureWidth(int textureWidth) {
-		this.textureWidth = textureWidth;
+	public BinPackerIn setTextureDimension(Dimension dimension) {
+		this.textureDimension = dimension;
 		return this;
 	}
-	public int getTextureHeight() {
-		return textureHeight;
-	}
-	public BinPackerIn setTextureHeight(int textureHeight) {
-		this.textureHeight = textureHeight;
+
+	public BinPackerIn addImages(Collection<PackableImage> images) {
+		this.images.addAll(images);
 		return this;
 	}	
 	

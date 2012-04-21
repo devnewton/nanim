@@ -24,9 +24,10 @@ public class BinPacker {
 	
 	private void startPacking(BinPackerIn in) {
 		out = new BinPackerOut();
+		out.textureDimension = in.textureDimension;
 		nonFreeRectangles = new ArrayList<Rectangle>();
 		freeRectangles =  new ArrayList<Rectangle>();
-		freeRectangles.add(new Rectangle(0, 0, in.textureWidth, in.textureHeight));
+		freeRectangles.add(new Rectangle(in.textureDimension));
 		packableImages = new ArrayList<PackableImage>();
 		packableImages.addAll(in.images);
 		Collections.sort(packableImages, PackableImage.biggerFirstComparator);

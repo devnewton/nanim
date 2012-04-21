@@ -31,17 +31,25 @@
  */
 package im.bci;
 
+import im.bci.binpacker.BinPack;
+import im.bci.binpacker.MultiBinPacker;
+import im.bci.binpacker.MultiBinPackerIn;
+import im.bci.binpacker.MultiBinPackerOut;
+import im.bci.binpacker.PackedImage;
 import im.bci.nanim.NanimParser;
-import im.bci.nanim.NanimParserUtils;
+import im.bci.nanim.NanimParser.Frame;
+import im.bci.nanim.NanimParser.Nanim.Builder;
+import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
+import im.bci.nanim.NanimParser.PixelFormat;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -49,29 +57,29 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import com.google.protobuf.ByteString;
+
 /**
  * nanim optimizer
- *
+ * 
  */
-public class NanimOpt 
-{
-    private CommandLine commandLine;
-	private Nanim nanim;
-	private HashMap<String, BufferedImage> images = new HashMap<String, BufferedImage>();
+public class NanimOpt {
+	private CommandLine commandLine;
+	private Nanim inputNanim;
+	private Nanim outputNanim;
 
 	public NanimOpt(CommandLine line) {
 		this.commandLine = line;
 	}
 
-	public static void main( String[] args ) throws ParseException, IOException
-    {
+	public static void main(String[] args) throws ParseException, IOException {
 		Options options = new Options();
 		options.addOption("i", true, "input nanim file");
 		options.addOption("o", true, "output nanim file");
-		
-		if(args.length == 0) {
+
+		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "nanimenc [args]", options );
+			formatter.printHelp("nanimenc [args]", options);
 			return;
 		}
 
@@ -80,61 +88,150 @@ public class NanimOpt
 
 		NanimOpt nanimOpt = new NanimOpt(line);
 		nanimOpt.decode();
+		if (nanimOpt.isAlreadyOptimized()) {
+			System.out.println("Input nanim file is already optimized.");
+		}
 		nanimOpt.optimize();
-		nanimOpt.loadImages();
-		nanimOpt.reencode();
 		nanimOpt.save();
-    }
-	
-	private void reencode() {
-		// TODO Auto-generated method stub
-		
+	}
+
+	private boolean isAlreadyOptimized() {
+		for (Animation animation : inputNanim.getAnimationsList()) {
+			for (Frame frame : animation.getFramesList()) {
+				if (frame.getU1() != 0.0 || frame.getV1() != 0.0
+						|| frame.getU2() != 1.0 || frame.getV2() != 1.0) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private void save() throws IOException {
 		File outputFile = new File(commandLine.getOptionValue("o"));
 		FileOutputStream os = new FileOutputStream(outputFile);
 		try {
-			nanim.writeTo(os);
+			outputNanim.writeTo(os);
 		} finally {
 			os.close();
 		}
-		
 	}
 
 	private void optimize() {
-		// TODO Auto-generated method stub
+
+		MultiBinPackerIn in = new MultiBinPackerIn();
+		for (Image image : inputNanim.getImagesList()) {
+			in.addImage(image, image.getWidth(), image.getHeight());
+		}
+		MultiBinPacker packer = new MultiBinPacker();
+		MultiBinPackerOut out = packer.pack(in);
+		Builder outputNanimBuilder = Nanim.newBuilder(inputNanim).clearImages()
+				.clearAnimations();
+		outputNanimBuilder
+				.addAllImages(createImagesFromBinPacks(out.getPacks()));
+		outputNanimBuilder
+				.addAllAnimations(createAnimationsFromOldAnimationsAndBinPacks(out
+						.getPacks()));
+		outputNanim = outputNanimBuilder.build();
+	}
+
+	private List<Animation> createAnimationsFromOldAnimationsAndBinPacks(
+			List<BinPack> packs) {
+		List<Animation> animations = new ArrayList<NanimParser.Animation>();
+		for (Animation oldAnimation : inputNanim.getAnimationsList()) {
+			animations.add(createAnimationFromOldAnimationAndBinPacks(
+					oldAnimation, packs));
+		}
+		return animations;
+	}
+
+	private Animation createAnimationFromOldAnimationAndBinPacks(
+			Animation oldAnimation, List<BinPack> packs) {
+		im.bci.nanim.NanimParser.Animation.Builder builder = Animation
+				.newBuilder(oldAnimation).clearFrames();
+		for (Frame oldFrame : oldAnimation.getFramesList()) {
+			builder.addFrames(createFrameFromOldFrameAndBinPacks(oldFrame,
+					packs));
+		}
+		return builder.build();
+	}
+
+	private Frame createFrameFromOldFrameAndBinPacks(Frame oldFrame,
+			List<BinPack> packs) {
+		for (int p = 0; p < packs.size(); ++p) {
+			BinPack pack = packs.get(p);
+			for (PackedImage packedImage : pack.getPackedImages()) {
+				NanimParser.Image oldImage = (Image) packedImage.getId();
+				if (oldImage.getName().equals(oldFrame.getImageName())) {
+					return Frame.newBuilder(oldFrame)
+							.setImageName("image_" + p)
+							.setU1((float) packedImage.getX1()
+									/ (float) pack.getTextureWidth())
+							.setV1((float) packedImage.getY1()
+									/ (float) pack.getTextureHeight())
+							.setU2((float) packedImage.getX2()
+									/ (float) pack.getTextureWidth())
+							.setV2((float) packedImage.getY2()
+									/ (float) pack.getTextureHeight()).build();
+				}
+			}
+		}
+		throw new RuntimeException(
+				"Cannot find packed image for old frame, optimization failed");
+	}
+
+	private List<NanimParser.Image> createImagesFromBinPacks(List<BinPack> packs) {
+
+		List<NanimParser.Image> images = new ArrayList<NanimParser.Image>();
+		for (int i = 0; i < packs.size(); ++i) {
+			images.add(createImageFromBinPack("image_" + i, packs.get(i)));
+		}
+		return images;
+	}
+
+	private NanimParser.Image createImageFromBinPack(String imageName,
+			BinPack binPack) {
+		im.bci.nanim.NanimParser.Image.Builder builder = NanimParser.Image
+				.newBuilder();
+		builder.setName(imageName);
+		builder.setWidth(binPack.getTextureWidth());
+		builder.setHeight(binPack.getTextureHeight());
+		builder.setFormat(PixelFormat.RGBA_8888);// todo detect if RGB is enough
+		byte[] pixels = new byte[binPack.getTextureWidth()
+				* binPack.getTextureHeight() * 4];
+		for (PackedImage packedImage : binPack.getPackedImages()) {
+			copyPixels(packedImage, pixels, binPack.getTextureWidth());
+		}
+		builder.setPixels(ByteString.copyFrom(pixels));
+		return builder.build();
+	}
+
+	private void copyPixels(PackedImage packedImage, byte[] texturePixels,
+			int textureWidth) {
+		NanimParser.Image image = (Image) packedImage.getId();
+		int srcWidth = packedImage.getWidth();
+		byte[] srcPixels = image.getPixels().toByteArray();
+		int packedBpp = image.getFormat() == PixelFormat.RGBA_8888 ? 4 : 3;
+		for (int x = packedImage.getX1(); x < packedImage.getX2(); ++x) {
+			for (int y = packedImage.getY1(); y < packedImage.getY2(); ++y) {
+				int destIndex = (x + y * textureWidth) * 4;
+				int srcIndex = (x + y * srcWidth) * packedBpp;
+				for (int i = 0; i < packedBpp; ++i) {
+					texturePixels[destIndex + i] = srcPixels[srcIndex + i];
+				}
+			}
+		}
+
 	}
 
 	private void decode() throws IOException {
 		File inputFile = new File(commandLine.getOptionValue("i"));
 		FileInputStream is = new FileInputStream(inputFile);
 		try {
-			nanim = NanimParser.Nanim.parseFrom(is);
+			inputNanim = NanimParser.Nanim.parseFrom(is);
 		} finally {
 			is.close();
 		}
-		
-	}
-	
-	private void loadImages() throws IOException {
-		for(Image image : nanim.getImagesList()) {
-			loadImage(image);
-		}		
-	}
 
-	private void loadImage(Image image) throws IOException {
-		BufferedImage outputImage = null;
-		switch(image.getFormat()) {
-		case RGBA_8888:
-			outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			NanimParserUtils.setRgba(outputImage, image);
-			break;
-		case RGB_888:
-			outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-			NanimParserUtils.setRgb(outputImage, image);
-			break;		
-		}
-		images.put(image.getName(), outputImage);
 	}
 }

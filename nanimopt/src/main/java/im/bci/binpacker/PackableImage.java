@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class PackableImage {
 	Object id;
 	int width, height;
-	private int area;
+	int area;
 	
 	public PackableImage(Object id, int width, int height) {
 		super();

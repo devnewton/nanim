@@ -4,6 +4,25 @@ import java.awt.Rectangle;
 
 public class PackedImage {
 	
+	public Object getId() {
+		return id;
+	}
+	public int getX1() {
+		return x1;
+	}
+	public int getY1() {
+		return y1;
+	}
+	public int getX2() {
+		return x2;
+	}
+	public int getY2() {
+		return y2;
+	}
+	public int getWidth() {
+		return x2 - x1;
+	}
+	
 	public PackedImage(PackableImage packableImage, Rectangle packableRectangle) {
 		this.id = packableImage.id;
 		this.x1 = packableRectangle.x;

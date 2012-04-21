@@ -1,26 +1,20 @@
 package im.bci.binpacker;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BinPackerOut {
+public class BinPackerOut extends BinPack {
 	
-	int textureWidth = 256;
-	int textureHeight = 256;
-	List<PackedImage> packedImages = new ArrayList<PackedImage>();
 	List<PackableImage> nonPackedImages = new ArrayList<PackableImage>();
+	Dimension textureDimension;
 	
-	public List<PackedImage> getPackedImages() {
-		return packedImages;
+	public Dimension getTextureDimension() {
+		return textureDimension;
 	}
+
 	public List<PackableImage> getNonPackedImages() {
 		return nonPackedImages;
-	}
-	public int getTextureWidth() {
-		return textureWidth;
-	}
-	public int getTextureHeight() {
-		return textureHeight;
 	}
 
 }
