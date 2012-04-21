@@ -80,8 +80,8 @@ public class NanimOpt
 
 		NanimOpt nanimOpt = new NanimOpt(line);
 		nanimOpt.decode();
-		nanimOpt.loadImages();
 		nanimOpt.optimize();
+		nanimOpt.loadImages();
 		nanimOpt.reencode();
 		nanimOpt.save();
     }
