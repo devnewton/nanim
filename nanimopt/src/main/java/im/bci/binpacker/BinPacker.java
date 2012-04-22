@@ -25,12 +25,21 @@ public class BinPacker {
 	private void startPacking(BinPackerIn in) {
 		out = new BinPackerOut();
 		out.textureDimension = in.textureDimension;
-		nonFreeRectangles = new ArrayList<Rectangle>();
-		freeRectangles =  new ArrayList<Rectangle>();
-		freeRectangles.add(new Rectangle(in.textureDimension));
 		packableImages = new ArrayList<PackableImage>();
 		packableImages.addAll(in.images);
 		Collections.sort(packableImages, PackableImage.biggerFirstComparator);
+		
+		//add the whole texture as the first free rectangle
+		freeRectangles =  new ArrayList<Rectangle>();
+		Rectangle initialFreeRectangle = new Rectangle(in.textureDimension);
+		freeRectangles.add(initialFreeRectangle);
+		
+		//add surrounding non free rectangles to avoid packing outside the texture
+		nonFreeRectangles = new ArrayList<Rectangle>();
+		nonFreeRectangles.add(new Rectangle(initialFreeRectangle.x + initialFreeRectangle.width, 0, initialFreeRectangle.width, initialFreeRectangle.height));
+		nonFreeRectangles.add(new Rectangle(initialFreeRectangle.y + initialFreeRectangle.height, 0, initialFreeRectangle.width, initialFreeRectangle.height));
+		nonFreeRectangles.add(new Rectangle(initialFreeRectangle.x - initialFreeRectangle.width, 0, initialFreeRectangle.width, initialFreeRectangle.height));
+		nonFreeRectangles.add(new Rectangle(initialFreeRectangle.y - initialFreeRectangle.height, 0, initialFreeRectangle.width, initialFreeRectangle.height));
 	}
 	
 	private void packNext() {

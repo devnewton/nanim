@@ -30,4 +30,10 @@ public class BinPackerIn {
 		return this;
 	}	
 	
+	public BinPackerIn setImages(Collection<PackableImage> images) {
+		this.images.clear();
+		this.images.addAll(images);
+		return this;
+	}
+	
 }

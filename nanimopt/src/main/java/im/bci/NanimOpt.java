@@ -163,7 +163,8 @@ public class NanimOpt {
 			for (PackedImage packedImage : pack.getPackedImages()) {
 				NanimParser.Image oldImage = (Image) packedImage.getId();
 				if (oldImage.getName().equals(oldFrame.getImageName())) {
-					return Frame.newBuilder(oldFrame)
+					return Frame
+							.newBuilder(oldFrame)
 							.setImageName("image_" + p)
 							.setU1((float) packedImage.getX1()
 									/ (float) pack.getTextureWidth())
@@ -209,19 +210,17 @@ public class NanimOpt {
 	private void copyPixels(PackedImage packedImage, byte[] texturePixels,
 			int textureWidth) {
 		NanimParser.Image image = (Image) packedImage.getId();
-		int srcWidth = packedImage.getWidth();
 		byte[] srcPixels = image.getPixels().toByteArray();
 		int packedBpp = image.getFormat() == PixelFormat.RGBA_8888 ? 4 : 3;
-		for (int x = packedImage.getX1(); x < packedImage.getX2(); ++x) {
-			for (int y = packedImage.getY1(); y < packedImage.getY2(); ++y) {
+		int srcIndex = 0;
+		for (int y = packedImage.getY1(); y < packedImage.getY2(); ++y) {
+			for (int x = packedImage.getX1(); x < packedImage.getX2(); ++x) {
 				int destIndex = (x + y * textureWidth) * 4;
-				int srcIndex = (x + y * srcWidth) * packedBpp;
 				for (int i = 0; i < packedBpp; ++i) {
-					texturePixels[destIndex + i] = srcPixels[srcIndex + i];
+					texturePixels[destIndex + i] = srcPixels[srcIndex++];
 				}
 			}
 		}
-
 	}
 
 	private void decode() throws IOException {

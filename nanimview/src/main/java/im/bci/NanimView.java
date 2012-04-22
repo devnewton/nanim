@@ -110,12 +110,14 @@ public class NanimView extends JFrame {
 			Image image = findImageByName(frame.getImageName());
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.clearRect(0, 0, this.getWidth(), this.getHeight());
-			int w = image.getWidth();
-			int h = image.getHeight();
-			int sx1 = (int) (w * frame.getU1());
-			int sy1 = (int) (h * frame.getV1());
-			int sx2 = (int) (w * frame.getU2());
-			int sy2 = (int) (h * frame.getV2());
+			int sw = image.getWidth();
+			int sh = image.getHeight();
+			int w = Math.abs((int)(sw * (frame.getU2() - frame.getU1())));
+			int h = Math.abs((int)(sh * (frame.getV2() - frame.getV1())));
+			int sx1 = (int) (sw * frame.getU1());
+			int sy1 = (int) (sh * frame.getV1());
+			int sx2 = (int) (sw * frame.getU2());
+			int sy2 = (int) (sh * frame.getV2());
 			g2d.drawImage(loadedImage, 0, 0, w,
 					h,
 					sx1,
@@ -155,8 +157,8 @@ public class NanimView extends JFrame {
 		for(Animation animation : nanim.getAnimationsList()){
 			for(Frame frame : animation.getFramesList()) {
 				Image image = findImageByName(frame.getImageName());
-				int frameW = Math.abs((int)(image.getWidth() * frame.getU2() - frame.getU1()));
-				int frameH = Math.abs((int)(image.getHeight() * frame.getV2() - frame.getV1()));
+				int frameW = Math.abs((int)(image.getWidth() * (frame.getU2() - frame.getU1())));
+				int frameH = Math.abs((int)(image.getHeight() * (frame.getV2() - frame.getV1())));
 				if(frameW>w)
 					w = frameW;
 				if(frameH>h)

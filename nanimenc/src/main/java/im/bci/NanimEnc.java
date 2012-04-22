@@ -72,10 +72,10 @@ public class NanimEnc {
 		options.addOption("author", true, "set author metadata");
 		options.addOption("license", true, "set license metadata");
 		options.addOption("o", true, "ouput file name");
-		
-		if(args.length == 0) {
+
+		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "nanimenc [args]", options );
+			formatter.printHelp("nanimenc [args]", options);
 			return;
 		}
 
@@ -88,7 +88,7 @@ public class NanimEnc {
 	}
 
 	private void save() throws IOException {
-		String output = commandLine.getOptionValue("o","output.nanim");
+		String output = commandLine.getOptionValue("o", "output.nanim");
 		FileOutputStream os = new FileOutputStream(output);
 		try {
 			nanim.writeTo(os);
@@ -96,7 +96,7 @@ public class NanimEnc {
 		} finally {
 			os.flush();
 			os.close();
-		}		
+		}
 	}
 
 	private void encode() throws IOException {
@@ -107,8 +107,9 @@ public class NanimEnc {
 		for (Option option : commandLine.getOptions()) {
 			String optName = option.getOpt();
 			if (optName.equals("a")) {
-				if(null != currentAnimationBuilder) {
-					animationCollectionBuilder.addAnimations(currentAnimationBuilder);
+				if (null != currentAnimationBuilder) {
+					animationCollectionBuilder
+							.addAnimations(currentAnimationBuilder);
 				}
 				currentAnimationBuilder = Animation.newBuilder();
 				currentAnimationBuilder.setName(option.getValue());
@@ -117,33 +118,33 @@ public class NanimEnc {
 			} else if (optName.equals("f")) {
 				if (null != currentAnimationBuilder) {
 					File imageFile = new File(option.getValue());
+					Image.Builder imageBuilder = encodeImage(imageFile);
+					images.put(imageFile.getName(), imageBuilder);
 					Frame.Builder frame = Frame.newBuilder()
 							.setDuration(currentDuration)
 							.setImageName(imageFile.getName()).setU1(0.0f)
 							.setU2(1.0f).setV1(0.0f).setV2(1.0f);
 					currentAnimationBuilder.addFrames(frame);
-					images.put(imageFile.getName(), encodeImage(imageFile)) ;
 				}
 			}
 		}
-		if(null != currentAnimationBuilder) {
+		if (null != currentAnimationBuilder) {
 			animationCollectionBuilder.addAnimations(currentAnimationBuilder);
 		}
-		for(Image.Builder image : images.values()) {
+		for (Image.Builder image : images.values()) {
 			animationCollectionBuilder.addImages(image);
 		}
 		String author = commandLine.getOptionValue("author");
-		if(null != author)
+		if (null != author)
 			animationCollectionBuilder.setAuthor(author);
 		String license = commandLine.getOptionValue("license");
-		if(null != license)
+		if (null != license)
 			animationCollectionBuilder.setLicense(license);
-			
+
 		nanim = animationCollectionBuilder.build();
 	}
 
-	private Image.Builder encodeImage( File imageFile)
-			throws IOException {
+	private Image.Builder encodeImage(File imageFile) throws IOException {
 		Image.Builder image = Image.newBuilder();
 		BufferedImage bufferedImage = ImageIO.read(imageFile);
 		image.setName(imageFile.getName());
@@ -152,10 +153,12 @@ public class NanimEnc {
 
 		if (bufferedImage.getColorModel().hasAlpha()) {
 			image.setFormat(PixelFormat.RGBA_8888);
-			image.setPixels(ByteString.copyFrom(NanimParserUtils.getRGBAPixels(bufferedImage)));
+			image.setPixels(ByteString.copyFrom(NanimParserUtils
+					.getRGBAPixels(bufferedImage)));
 		} else {
 			image.setFormat(PixelFormat.RGB_888);
-			image.setPixels(ByteString.copyFrom(NanimParserUtils.getRGBPixels(bufferedImage)));
+			image.setPixels(ByteString.copyFrom(NanimParserUtils
+					.getRGBPixels(bufferedImage)));
 		}
 		return image;
 	}

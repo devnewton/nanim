@@ -1,12 +1,12 @@
 package im.bci.binpacker;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BinPack {
 
-	protected int textureWidth;
-	protected int textureHeight;
+	protected Dimension textureDimension;
 	protected List<PackedImage> packedImages = new ArrayList<PackedImage>();
 
 	public BinPack() {
@@ -18,11 +18,11 @@ public class BinPack {
 	}
 
 	public int getTextureWidth() {
-		return textureWidth;
+		return textureDimension.width;
 	}
 
 	public int getTextureHeight() {
-		return textureHeight;
+		return textureDimension.height;
 	}
 
 }
