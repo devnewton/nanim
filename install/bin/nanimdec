@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar nanimdec-1.0-SNAPSHOT.jar

@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar nanimview-1.0-SNAPSHOT.jar
