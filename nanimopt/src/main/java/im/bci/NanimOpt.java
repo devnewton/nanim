@@ -117,6 +117,7 @@ public class NanimOpt {
 		FileOutputStream os = new FileOutputStream(outputFile);
 		try {
 			outputNanim.writeTo(os);
+			System.out.println("optimized nanim written to " + outputFile);
 		} finally {
 			os.close();
 		}
