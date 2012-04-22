@@ -43,13 +43,17 @@ import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParser.PixelFormat;
+import im.bci.nanim.NanimParserUtils;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -76,6 +80,7 @@ public class NanimOpt {
 		Options options = new Options();
 		options.addOption("i", true, "input nanim file");
 		options.addOption("o", true, "output nanim file");
+		options.addOption("debug", false, "enable debug mode");
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
@@ -123,6 +128,7 @@ public class NanimOpt {
 		for (Image image : inputNanim.getImagesList()) {
 			in.addImage(image, image.getWidth(), image.getHeight());
 		}
+		in.setDebug(commandLine.hasOption("debug"));
 		MultiBinPacker packer = new MultiBinPacker();
 		MultiBinPackerOut out = packer.pack(in);
 		Builder outputNanimBuilder = Nanim.newBuilder(inputNanim).clearImages()
@@ -204,20 +210,33 @@ public class NanimOpt {
 			copyPixels(packedImage, pixels, binPack.getTextureWidth());
 		}
 		builder.setPixels(ByteString.copyFrom(pixels));
-		return builder.build();
+		Image image = builder.build();
+
+		if (commandLine.hasOption("debug")) {
+			BufferedImage taisteImage = new BufferedImage(image.getWidth(),
+					image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			NanimParserUtils.setRgba(taisteImage, image);
+			try {
+				ImageIO.write(taisteImage, "png", new File("nanimopt_debug_" + image.getName() + ".png"));
+			} catch (IOException e) {
+				System.err.println(e);
+			}
+		}
+		return image;
 	}
 
 	private void copyPixels(PackedImage packedImage, byte[] texturePixels,
 			int textureWidth) {
 		NanimParser.Image image = (Image) packedImage.getId();
-		byte[] srcPixels = image.getPixels().toByteArray();
+
+		ByteString srcPixels = image.getPixels();
 		int packedBpp = image.getFormat() == PixelFormat.RGBA_8888 ? 4 : 3;
 		int srcIndex = 0;
 		for (int y = packedImage.getY1(); y < packedImage.getY2(); ++y) {
 			for (int x = packedImage.getX1(); x < packedImage.getX2(); ++x) {
 				int destIndex = (x + y * textureWidth) * 4;
 				for (int i = 0; i < packedBpp; ++i) {
-					texturePixels[destIndex + i] = srcPixels[srcIndex++];
+					texturePixels[destIndex++] = srcPixels.byteAt(srcIndex++);
 				}
 			}
 		}

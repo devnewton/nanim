@@ -20,7 +20,7 @@ public class MultiBinPacker {
 			
 			//try to pack all input images in the smallest possible texture
 			for(Dimension textureDimension : possibleTextureDimensions) {
-				packerOut = packer.pack(packerIn.setTextureDimension(textureDimension).setImages(packableImages));
+				packerOut = packer.pack(packerIn.setTextureDimension(textureDimension).setImages(packableImages).setDebug(in.debug));
 				if(packerOut.getNonPackedImages().isEmpty()) {
 					break;
 				}

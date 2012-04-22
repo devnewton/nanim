@@ -9,6 +9,7 @@ public class BinPackerIn {
 	
 	List<PackableImage> images = new ArrayList<PackableImage>();
 	Dimension textureDimension = new Dimension(256, 256);
+	boolean debug = false;
 	
 	public BinPackerIn addImage(Object id, int width, int height) {
 		images.add(new PackableImage(id, width, height));
@@ -33,6 +34,11 @@ public class BinPackerIn {
 	public BinPackerIn setImages(Collection<PackableImage> images) {
 		this.images.clear();
 		this.images.addAll(images);
+		return this;
+	}
+	
+	public BinPackerIn setDebug(boolean enabled) {
+		this.debug  = enabled;
 		return this;
 	}
 	
