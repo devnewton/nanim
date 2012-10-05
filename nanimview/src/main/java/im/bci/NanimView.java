@@ -188,6 +188,12 @@ public class NanimView extends JFrame {
 
 		GnuParser parser = new GnuParser();
 		CommandLine line = parser.parse(options, args);
+		
+		if(!line.hasOption("i")) {
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("nanimenc [args]", options);
+			return;
+		}
 
 		new NanimView(line);
 	}
