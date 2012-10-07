@@ -236,6 +236,7 @@ public class NanimOpt {
 		for (int y = packedImage.getY1(); y < packedImage.getY2(); ++y) {
 			for (int x = packedImage.getX1(); x < packedImage.getX2(); ++x) {
 				int destIndex = (x + y * textureWidth) * 4;
+				texturePixels[destIndex+3] = (byte)255;
 				for (int i = 0; i < packedBpp; ++i) {
 					texturePixels[destIndex++] = srcPixels.byteAt(srcIndex++);
 				}
