@@ -16,6 +16,7 @@
 		<module>nanimparser</module>
 		<module>nanimenc</module>
 		<module>nanimdec</module>
+		<module>nanimls</module>
 		<module>nanimview</module>
 		<module>nanimopt</module>
 	</modules>

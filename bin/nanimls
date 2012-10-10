@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar ${NANIM_HOME}/bin/nanimls-1.0-SNAPSHOT.jar $*
