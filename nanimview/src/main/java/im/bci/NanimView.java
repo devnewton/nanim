@@ -67,10 +67,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-/**
- * Hello world!
- * 
- */
 public class NanimView extends JFrame {
 	private static final long serialVersionUID = -5634646781822978236L;
 	private CommandLine commandLine;
