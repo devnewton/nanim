@@ -13,6 +13,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	<modules>
+		<module>gif2nanim</module>
 		<module>nanimparser</module>
 		<module>nanimenc</module>
 		<module>nanimdec</module>
