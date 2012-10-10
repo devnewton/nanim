@@ -221,7 +221,6 @@ public class NanimView extends JFrame {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		Options options = new Options();
-		options.addOption("i", true, "input nanim file");
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
@@ -232,7 +231,7 @@ public class NanimView extends JFrame {
 		GnuParser parser = new GnuParser();
 		CommandLine line = parser.parse(options, args);
 
-		if (!line.hasOption("i")) {
+		if (line.getArgList().isEmpty()) {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("nanimenc [args]", options);
 			return;
@@ -242,7 +241,7 @@ public class NanimView extends JFrame {
 	}
 
 	private void decode() throws IOException {
-		File inputFile = new File(commandLine.getOptionValue("i"));
+		File inputFile = new File(commandLine.getArgList().get(0).toString());
 		FileInputStream is = new FileInputStream(inputFile);
 		try {
 			nanim = NanimParser.Nanim.parseFrom(is);
