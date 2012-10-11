@@ -224,7 +224,7 @@ public class NanimView extends JFrame {
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("nanimenc [args]", options);
+			formatter.printHelp("nanimview [args] foo.nanim", options);
 			return;
 		}
 
@@ -233,7 +233,7 @@ public class NanimView extends JFrame {
 
 		if (line.getArgList().isEmpty()) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("nanimenc [args]", options);
+			formatter.printHelp("nanimview [args] foo.nanim", options);
 			return;
 		}
 
