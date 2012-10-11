@@ -79,7 +79,7 @@ public class Gif2Nanim {
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("nanimenc [args]", options);
+			formatter.printHelp("gif2nanim [args]", options);
 			return;
 		}
 
