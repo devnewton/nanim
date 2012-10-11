@@ -39,7 +39,7 @@ public class NanimDec
 		
 		if(args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "nanimenc [args] foo.nanim", options );
+			formatter.printHelp( "nanimdec [args] foo.nanim", options );
 			return;
 		}
 
