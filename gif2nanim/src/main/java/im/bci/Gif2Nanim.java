@@ -59,27 +59,27 @@ public class Gif2Nanim {
 	private CommandLine commandLine;
 	private im.bci.GifDecoder gif;
 	private String animationName;
+	private String gifFilename;
 
 	public Gif2Nanim(CommandLine line) {
 		this.commandLine = line;
+		this.gifFilename = commandLine.getArgList().get(0).toString();
 		if(commandLine.hasOption("name")) {
 			animationName = commandLine.getOptionValue("name");
 		} else {
-			animationName = commandLine.getOptionValue("i");
+			animationName = gifFilename;
 		}
 	}
 
 	public static void main(String[] args) throws ParseException, IOException {
 		Options options = new Options();
-		options.addOption("i", true, "input gif file name");
 		options.addOption("name", true, "set animation name");
 		options.addOption("author", true, "set author metadata");
 		options.addOption("license", true, "set license metadata");
-		options.addOption("o", true, "ouput file name");
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("gif2nanim [args]", options);
+			formatter.printHelp("gif2nanim [args] foo.gif output.nanim", options);
 			return;
 		}
 
@@ -94,11 +94,16 @@ public class Gif2Nanim {
 
 	private void decode() throws FileNotFoundException {
 		gif = new GifDecoder();
-		gif.read(new FileInputStream(commandLine.getOptionValue("i")));
+		gif.read(new FileInputStream(gifFilename));
 	}
 
 	private void save() throws IOException {
-		String output = commandLine.getOptionValue("o", "output.nanim");
+		String output;
+		if(commandLine.getArgList().size() >= 2) {
+			output = commandLine.getArgList().get(1).toString();
+		} else {
+			output = gifFilename.replace(".gif", ".nanim");
+		}
 		FileOutputStream os = new FileOutputStream(output);
 		try {
 			nanim.writeTo(os);

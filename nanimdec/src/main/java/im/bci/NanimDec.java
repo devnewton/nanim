@@ -35,12 +35,11 @@ public class NanimDec
 	public static void main( String[] args ) throws ParseException, IOException
     {
 		Options options = new Options();
-		options.addOption("i", true, "input nanim file");
 		options.addOption("o", true, "output directory");
 		
 		if(args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp( "nanimenc [args]", options );
+			formatter.printHelp( "nanimenc [args] foo.nanim", options );
 			return;
 		}
 
@@ -53,7 +52,7 @@ public class NanimDec
     }
 	
 	private void decode() throws IOException {
-		File inputFile = new File(commandLine.getOptionValue("i"));
+		File inputFile = new File(commandLine.getArgList().get(0).toString());
 		FileInputStream is = new FileInputStream(inputFile);
 		try {
 			nanim = NanimParser.Nanim.parseFrom(is);
