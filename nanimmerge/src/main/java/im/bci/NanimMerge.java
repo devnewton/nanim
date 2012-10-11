@@ -78,7 +78,7 @@ public class NanimMerge {
 		
 		if (!line.hasOption("o")) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("nanimls [args] foo.nanim foo2.nanim foo3.nanim ...", options);
+			formatter.printHelp("nanimmerge [args] foo.nanim foo2.nanim foo3.nanim ...", options);
 			return;
 		}
 
