@@ -19,6 +19,7 @@
 		<module>nanimdec</module>
 		<module>nanimls</module>
 		<module>nanimmerge</module>
+		<module>nanimrename</module>
 		<module>nanimview</module>
 		<module>nanimopt</module>
 	</modules>
