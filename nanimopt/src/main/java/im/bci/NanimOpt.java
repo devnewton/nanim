@@ -78,13 +78,11 @@ public class NanimOpt {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		Options options = new Options();
-		options.addOption("i", true, "input nanim file");
-		options.addOption("o", true, "output nanim file");
 		options.addOption("debug", false, "enable debug mode");
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("nanimenc [args]", options);
+			formatter.printHelp("nanimenc [args] input.nanim ouptut.nanim", options);
 			return;
 		}
 
@@ -113,7 +111,7 @@ public class NanimOpt {
 	}
 
 	private void save() throws IOException {
-		File outputFile = new File(commandLine.getOptionValue("o"));
+		File outputFile = new File(commandLine.getArgList().get(commandLine.getArgList().size()-1).toString());
 		FileOutputStream os = new FileOutputStream(outputFile);
 		try {
 			outputNanim.writeTo(os);
@@ -245,7 +243,7 @@ public class NanimOpt {
 	}
 
 	private void decode() throws IOException {
-		File inputFile = new File(commandLine.getOptionValue("i"));
+		File inputFile = new File(commandLine.getArgList().get(0).toString());
 		FileInputStream is = new FileInputStream(inputFile);
 		try {
 			inputNanim = NanimParser.Nanim.parseFrom(is);
