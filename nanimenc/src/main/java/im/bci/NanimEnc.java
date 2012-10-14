@@ -35,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
@@ -76,9 +77,9 @@ public class NanimEnc {
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp("nanimenc [args]", options);
+			System.out.println("Supported image formats: " + Arrays.toString(ImageIO.getReaderFormatNames()));						
 			return;
 		}
-
 		GnuParser parser = new GnuParser();
 		CommandLine line = parser.parse(options, args);
 
