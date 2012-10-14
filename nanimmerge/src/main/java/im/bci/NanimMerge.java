@@ -56,6 +56,7 @@ public class NanimMerge {
 	private CommandLine commandLine;
 	private HashSet<String> imageNames = new HashSet<String>();
 	private HashSet<String> animationNames = new HashSet<String>();
+	HashMap<String, String> oldToNewImageNameMap = new HashMap<String, String>();
 
 	public NanimMerge(CommandLine line) {
 		this.commandLine = line;
@@ -102,7 +103,6 @@ public class NanimMerge {
 	}
 
 	private void merge(Nanim nanim) {
-		HashMap<String, String> oldToNewImageNameMap = new HashMap<String, String>();
 		for(Image image : nanim.getImagesList()) {
 			final String imageName = image.getName();
 			boolean isNew = imageNames.add(imageName);
@@ -112,6 +112,7 @@ public class NanimMerge {
 			} else {
 				String newImageName = computeNewImageName(imageName);
 				System.out.println("image '" + imageName + "' renamed to '" + newImageName + "'");
+				imageNames.add(newImageName);
 				oldToNewImageNameMap.put(imageName, newImageName);				
 				nanimOut.addImages(Image.newBuilder(image).setName(newImageName).build());
 			}
@@ -124,6 +125,7 @@ public class NanimMerge {
 				final String newAnimationName = computeNewAnimationName(animationName);
 				animationBuilder.setName(newAnimationName);
 				System.out.println("animation '" + animationName + "' renamed to '" + newAnimationName + "'");
+				animationNames.add(newAnimationName);
 			}
 			for(int i = 0; i<animationBuilder.getFramesCount(); ++i) {
 				Frame frame = animationBuilder.getFrames(i);
