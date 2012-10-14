@@ -2,6 +2,7 @@ package im.bci.nanim;
 
 import im.bci.nanim.NanimParser.Image;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import com.google.protobuf.ByteString;
@@ -54,18 +55,14 @@ public class NanimParserUtils {
 		int pixelIndex = 0;
 		for (int y = 0; y < h; ++y) {
 			for (int x = 0; x < w; ++x) {
-				byte r = pixels.byteAt(pixelIndex++);
-				byte g = pixels.byteAt(pixelIndex++);
-				byte b = pixels.byteAt(pixelIndex++);
-				byte a = pixels.byteAt(pixelIndex++);
 
-				// ImageIO is just plain stupid...
-				if (a == 0) {
-					a = 1;
-				}
-
-				int rgba = (a << 24) + (r << 16) + (g << 8) + b;
-				outputImage.setRGB(x, y, rgba);
+  				int r = pixels.byteAt(pixelIndex++) & 0xff;
+				int g = pixels.byteAt(pixelIndex++) & 0xff;
+				int b = pixels.byteAt(pixelIndex++) & 0xff;
+				int a = pixels.byteAt(pixelIndex++) & 0xff;
+				
+				Color c = new Color(r, g, b, a);
+				outputImage.setRGB(x, y, c.getRGB());
 			}
 		}
 	}
@@ -77,11 +74,12 @@ public class NanimParserUtils {
 		int pixelIndex = 0;
 		for (int y = 0; y < h; ++y) {
 			for (int x = 0; x < w; ++x) {
-				int r = pixels.byteAt(pixelIndex++);
-				int g = pixels.byteAt(pixelIndex++);
-				int b = pixels.byteAt(pixelIndex++);
-				int rgba = (r << 16) + (g << 8) + b;
-				outputImage.setRGB(x, y, rgba);
+  				int r = pixels.byteAt(pixelIndex++) & 0xff;
+				int g = pixels.byteAt(pixelIndex++) & 0xff;
+				int b = pixels.byteAt(pixelIndex++) & 0xff;
+				
+				Color c = new Color(r, g, b);
+				outputImage.setRGB(x, y, c.getRGB());
 			}
 		}
 	}
