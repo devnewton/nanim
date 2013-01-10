@@ -22,6 +22,7 @@
 		<module>nanimrename</module>
 		<module>nanimview</module>
 		<module>nanimopt</module>
+                <module>sheet2nanim</module>
 	</modules>
 </project>
 
