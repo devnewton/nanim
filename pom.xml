@@ -20,6 +20,7 @@
 		<module>nanimls</module>
 		<module>nanimmerge</module>
 		<module>nanimrename</module>
+                <module>nanimspeed</module>
 		<module>nanimview</module>
 		<module>nanimopt</module>
                 <module>sheet2nanim</module>
