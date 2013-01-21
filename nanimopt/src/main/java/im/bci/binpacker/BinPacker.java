@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +22,7 @@ public class BinPacker {
 	private ArrayList<PackableImage> packableImages;
 	private BinPackerOut out;
 	private boolean debug;
-	private int step;
+	private static int step;
 
 	public BinPackerOut pack(BinPackerIn in) {
 		startPacking(in);
@@ -59,8 +60,6 @@ public class BinPacker {
 		nonFreeRectangles.add(new Rectangle(initialFreeRectangle.y
 				- initialFreeRectangle.height, 0, initialFreeRectangle.width,
 				initialFreeRectangle.height));
-
-		step = 0;
 	}
 
 	private void packNext() {
@@ -101,7 +100,7 @@ public class BinPacker {
 	private boolean fitsIn(Rectangle packableRectangle, Rectangle freeRectangle) {
 		return packableRectangle.width <= freeRectangle.width && packableRectangle.height <= freeRectangle.height;
 	}
-
+        
 	private void saveDebugImage() {
 		BufferedImage debugImage = new BufferedImage(out.getTextureWidth(),
 				out.getTextureHeight(), BufferedImage.TYPE_3BYTE_BGR);
@@ -116,9 +115,9 @@ public class BinPacker {
 		}
 		g.dispose();
 		try {
+                    String debugFilename =  MessageFormat.format("nanimopt_debug_{0,number,#000}_{1}x{2}.png", step, out.getTextureWidth(), out.getTextureHeight());
 			ImageIO.write(debugImage, "png",
-					new File("nanimopt_debug_image_" + out.getTextureWidth() + 'x'
-							+ out.getTextureHeight() + "_step_" + step + ".png"));
+					new File(debugFilename));
 		} catch (IOException e) {
 			System.err.println(e);
 		}
