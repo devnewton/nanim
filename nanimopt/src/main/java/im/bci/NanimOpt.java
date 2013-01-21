@@ -45,6 +45,7 @@ import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParser.PixelFormat;
 import im.bci.nanim.NanimParserUtils;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,7 +79,8 @@ public class NanimOpt {
 
 	public static void main(String[] args) throws ParseException, IOException {
 		Options options = new Options();
-		options.addOption("debug", false, "enable debug mode");
+		options.addOption("debug", false, "Enable debug mode");
+                options.addOption("size", true, "Add possible size. Example: 256x256. If none, all possible power of two square size from 16x16 to 1024x1024 will be tried.");
 
 		if (args.length == 0) {
 			HelpFormatter formatter = new HelpFormatter();
@@ -127,6 +129,7 @@ public class NanimOpt {
 		for (Image image : inputNanim.getImagesList()) {
 			in.addImage(image, image.getWidth(), image.getHeight());
 		}
+                in.setPossibleTextureDimensions(parsePossibleDimensions(commandLine.getOptionValues("size")));
 		in.setDebug(commandLine.hasOption("debug"));
 		MultiBinPacker packer = new MultiBinPacker();
 		MultiBinPackerOut out = packer.pack(in);
@@ -252,4 +255,18 @@ public class NanimOpt {
 		}
 
 	}
+
+    private List<Dimension> parsePossibleDimensions(String[] optionValues) {
+        if(null == optionValues) {
+            return null;
+        }
+        List<Dimension> dimensions = new ArrayList<Dimension>();
+        for(String optionValue : optionValues) {
+            String[] dims = optionValue.split("x");
+            int w = Integer.valueOf(dims[0]);
+            int h = Integer.valueOf(dims[1]);
+            dimensions.add(new Dimension(w, h));
+        }
+        return dimensions;
+    }
 }
