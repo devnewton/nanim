@@ -25,6 +25,7 @@
 		<module>nanimview</module>
 		<module>nanimopt</module>
                 <module>sheet2nanim</module>
+		<module>nanimstudio</module>
 	</modules>
 </project>
 
