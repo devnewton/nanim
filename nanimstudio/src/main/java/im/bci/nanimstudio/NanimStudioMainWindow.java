@@ -30,10 +30,15 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         nanim = nanimStudio.getNanim();
         nimagesEditor = new im.bci.nanimstudio.NimagesEditor();
         nanimationEditor = new im.bci.nanimstudio.NanimationEditor();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        nFramesEditor1 = new im.bci.nanimstudio.NframesEditor();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem_new = new javax.swing.JMenuItem();
@@ -47,6 +52,8 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -54,10 +61,41 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         getContentPane().add(nimagesEditor, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(nanimationEditor, gridBagConstraints);
+
+        jLabel1.setText("Images");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Animations");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Frames");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, nanimationEditor, org.jdesktop.beansbinding.ELProperty.create("${selectedAnimation}"), nFramesEditor1, org.jdesktop.beansbinding.BeanProperty.create("animation"));
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        getContentPane().add(nFramesEditor1, gridBagConstraints);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -104,6 +142,8 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         menuBar.add(helpMenu);
 
         setJMenuBar(menuBar);
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -155,13 +195,18 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuBar menuBar;
+    private im.bci.nanimstudio.NframesEditor nFramesEditor1;
     private im.bci.nanimstudio.model.Nanim nanim;
     private im.bci.nanimstudio.NanimationEditor nanimationEditor;
     private im.bci.nanimstudio.NimagesEditor nimagesEditor;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

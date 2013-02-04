@@ -4,6 +4,8 @@
  */
 package im.bci.nanimstudio.model;
 
+import java.util.prefs.Preferences;
+
 /**
  *
  * @author bob
@@ -24,6 +26,10 @@ public class NanimStudioModel {
      */
     public Nanim getNanim() {
         return nanim;
+    }
+    
+    public Preferences getPreferences() {
+        return Preferences.userRoot().node("nanimstudio");
     }
 
 }

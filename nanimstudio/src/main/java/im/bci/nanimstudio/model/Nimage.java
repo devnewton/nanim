@@ -45,4 +45,9 @@ public class Nimage {
         this.image = newImage;
         propertyChangeSupport.firePropertyChange("image", oldImage, image);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

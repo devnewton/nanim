@@ -4,8 +4,10 @@
  */
 package im.bci.nanimstudio;
 
+import im.bci.nanim.NanimParser;
 import im.bci.nanimstudio.model.Nanim;
 import im.bci.nanimstudio.model.NanimStudioModel;
+import im.bci.nanimstudio.model.Nanimation;
 import java.util.List;
 
 /**
@@ -15,6 +17,17 @@ import java.util.List;
 public class NanimationEditor extends javax.swing.JPanel {
 
     private final NanimStudioModel nanimStudio;
+    private Nanimation selectedAnimation;
+
+    public Nanimation getSelectedAnimation() {
+        return selectedAnimation;
+    }
+
+    public void setSelectedAnimation(Nanimation newSelectedAnimation) {
+        Nanimation oldValue = selectedAnimation;
+        selectedAnimation = newSelectedAnimation;
+        firePropertyChange("selectedAnimation", oldValue, selectedAnimation);
+    }
 
     /**
      * Creates new form NanimationEditor
@@ -49,6 +62,8 @@ public class NanimationEditor extends javax.swing.JPanel {
         org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, nanim, eLProperty, jList_animations);
         jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
         bindingGroup.addBinding(jListBinding);
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedAnimation}"), jList_animations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(jList_animations);
 
@@ -87,7 +102,7 @@ public class NanimationEditor extends javax.swing.JPanel {
         gridBagConstraints.gridy = 2;
         add(jLabel1, gridBagConstraints);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList_animations, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.name}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList_animations, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.name}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -100,7 +115,9 @@ public class NanimationEditor extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        nanim.addNewAnimation();
+        Nanimation animation = nanim.addNewAnimation();
+        jList_animations.clearSelection();
+        jList_animations.setSelectedValue(animation.getName(), true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

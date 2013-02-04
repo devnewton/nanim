@@ -4,7 +4,6 @@
  */
 package im.bci.nanimstudio;
 
-import im.bci.nanimstudio.model.Nanim;
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.model.Nimage;
 import java.util.Arrays;
@@ -17,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author bob
  */
 public class NimagesEditor extends javax.swing.JPanel {
+
     private final NanimStudioModel nanimStudio;
 
     /**
@@ -154,9 +154,10 @@ public class NimagesEditor extends javax.swing.JPanel {
         Nimage nimage = nanim.addNewImage();
         boolean loaded = false;
         try {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastImageDirectory", null));
             chooser.setFileFilter(new FileNameExtensionFilter("Images", "png", "jpg"));
             if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
+                nanimStudio.getPreferences().put("lastImageDirectory", chooser.getCurrentDirectory().getAbsolutePath());
                 nanim.loadImage(nimage.getName(), chooser.getSelectedFile());
                 jList_images.clearSelection();
                 jList_images.setSelectedValue(nimage.getName(), true);
@@ -176,13 +177,15 @@ public class NimagesEditor extends javax.swing.JPanel {
 
     private void jButton_loadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_loadActionPerformed
         if (!jList_images.isSelectionEmpty()) {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastImageDirectory", null));
             chooser.setFileFilter(new FileNameExtensionFilter("Images", "png", "jpg"));
-            chooser.showOpenDialog(this);
-            String selected = jList_images.getSelectedValue().toString();
-            nanim.loadImage(selected, chooser.getSelectedFile());
-            jList_images.clearSelection();
-            jList_images.setSelectedValue(selected, true);
+            if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
+                nanimStudio.getPreferences().put("lastImageDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+                String selected = jList_images.getSelectedValue().toString();
+                nanim.loadImage(selected, chooser.getSelectedFile());
+                jList_images.clearSelection();
+                jList_images.setSelectedValue(selected, true);
+            }
         }
     }//GEN-LAST:event_jButton_loadActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

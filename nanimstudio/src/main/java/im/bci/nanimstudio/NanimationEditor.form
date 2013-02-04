@@ -40,6 +40,9 @@
             <BindingProperty name="elements" source="nanim" sourcePath="${animations}" target="jList_animations" targetPath="elements" updateStrategy="0" immediately="false">
               <BindingParameter name="DISPLAY" value="${name}"/>
             </BindingProperty>
+            <BindingProperty name="selectedElement" source="Form" sourcePath="${selectedAnimation}" target="jList_animations" targetPath="selectedElement" updateStrategy="0" immediately="false">
+              <BindingParameter name="IGNORE_ADJUSTING" value="N"/>
+            </BindingProperty>
           </BindingProperties>
         </Component>
       </SubComponents>

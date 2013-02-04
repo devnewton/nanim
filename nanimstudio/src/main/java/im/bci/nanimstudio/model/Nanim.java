@@ -100,13 +100,14 @@ public class Nanim {
         return null;
     }
 
-    public void addNewAnimation() {
+    public Nanimation addNewAnimation() {
         Nanimation nanimation = new Nanimation();
         nanimation.setName(generateNewAnimationName());
         List<Nanimation> oldAnimations = animations;
         animations = new ArrayList<Nanimation>(animations);
         animations.add(nanimation);
         propertyChangeSupport.firePropertyChange("animations", oldAnimations, Collections.unmodifiableList(animations));
+        return nanimation;
     }
 
     private String generateNewAnimationName() {
