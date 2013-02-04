@@ -5,8 +5,8 @@
 package im.bci.nanimstudio;
 
 import im.bci.nanimstudio.model.Nanim;
+import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.model.Nimage;
-import java.awt.FileDialog;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -17,12 +17,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author bob
  */
 public class NimagesEditor extends javax.swing.JPanel {
+    private final NanimStudioModel nanimStudio;
 
     /**
      * Creates new form NimagesEditor
      */
     public NimagesEditor() {
-        nanim = new Nanim();
+        nanimStudio = NanimStudioModel.getInstance();
         initComponents();
     }
 
@@ -37,7 +38,7 @@ public class NimagesEditor extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        nanim = new im.bci.nanimstudio.model.Nanim();
+        nanim = nanimStudio.getNanim();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList_images = new javax.swing.JList();
         jButton_add = new javax.swing.JButton();
@@ -64,7 +65,8 @@ public class NimagesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.5;
         add(jScrollPane1, gridBagConstraints);
 
         jButton_add.setText("add");
@@ -140,6 +142,9 @@ public class NimagesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         add(nimageViewer1, gridBagConstraints);
 
         bindingGroup.bind();

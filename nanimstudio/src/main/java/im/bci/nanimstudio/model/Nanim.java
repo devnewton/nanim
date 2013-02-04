@@ -21,10 +21,15 @@ import javax.imageio.ImageIO;
  */
 public class Nanim {
 
+    private List<Nanimation> animations = Collections.emptyList();
     private List<Nimage> images = Collections.emptyList();
 
     public List<Nimage> getImages() {
         return images;
+    }
+
+    public List<Nanimation> getAnimations() {
+        return animations;
     }
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -93,5 +98,61 @@ public class Nanim {
             }
         }
         return null;
+    }
+
+    public void addNewAnimation() {
+        Nanimation nanimation = new Nanimation();
+        nanimation.setName(generateNewAnimationName());
+        List<Nanimation> oldAnimations = animations;
+        animations = new ArrayList<Nanimation>(animations);
+        animations.add(nanimation);
+        propertyChangeSupport.firePropertyChange("animations", oldAnimations, Collections.unmodifiableList(animations));
+    }
+
+    private String generateNewAnimationName() {
+        for (int i = 0;; ++i) {
+            String newName = "animation_" + i;
+            if (!isAnimationNameAlreadyUsed(newName)) {
+                return newName;
+            }
+        }
+    }
+
+    private boolean isAnimationNameAlreadyUsed(String newName) {
+
+        for (Nanimation animation : animations) {
+            if (newName.equals(animation.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void clear() {
+        clearAnimations();
+        clearImages();
+    }
+
+    private void clearAnimations() {
+        List<Nanimation> oldAnimations = animations;
+        animations = Collections.emptyList();
+        propertyChangeSupport.firePropertyChange("animations", oldAnimations, animations);
+    }
+
+    private void clearImages() {
+        List<Nimage> oldImages = images;
+        images = Collections.emptyList();
+        propertyChangeSupport.firePropertyChange("images", oldImages, images);
+    }
+
+    public void removeAnimations(List<String> animationsToRemove) {
+        List<Nanimation> oldAnimations = animations;
+        animations = new ArrayList<Nanimation>();
+        for (Nanimation animation : oldAnimations) {
+            if (!animationsToRemove.contains(animation.getName())) {
+                animations.add(animation);
+            }
+        }
+        propertyChangeSupport.firePropertyChange("animations", oldAnimations, Collections.unmodifiableList(animations));
     }
 }

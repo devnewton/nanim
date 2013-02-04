@@ -4,16 +4,20 @@
  */
 package im.bci.nanimstudio;
 
+import im.bci.nanimstudio.model.NanimStudioModel;
+
 /**
  *
  * @author bob
  */
 public class NanimStudioMainWindow extends javax.swing.JFrame {
+    private final NanimStudioModel nanimStudio;
 
     /**
      * Creates new form NanimStudioMainWindow
      */
     public NanimStudioMainWindow() {
+        nanimStudio = NanimStudioModel.getInstance();
         initComponents();
     }
 
@@ -25,10 +29,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        nimagesEditor1 = new im.bci.nanimstudio.NimagesEditor();
+        nanim = nanimStudio.getNanim();
+        nimagesEditor = new im.bci.nanimstudio.NimagesEditor();
+        nanimationEditor = new im.bci.nanimstudio.NanimationEditor();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        jMenuItem_new = new javax.swing.JMenuItem();
         openMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
@@ -37,9 +45,30 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
+        getContentPane().add(nimagesEditor, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        getContentPane().add(nanimationEditor, gridBagConstraints);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
+
+        jMenuItem_new.setText("New");
+        jMenuItem_new.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_newActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_new);
 
         openMenuItem.setMnemonic('o');
         openMenuItem.setText("Open");
@@ -76,29 +105,16 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
         setJMenuBar(menuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(nimagesEditor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(nimagesEditor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void jMenuItem_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_newActionPerformed
+        nanim.clear();
+    }//GEN-LAST:event_jMenuItem_newActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,8 +155,11 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuBar menuBar;
-    private im.bci.nanimstudio.NimagesEditor nimagesEditor1;
+    private im.bci.nanimstudio.model.Nanim nanim;
+    private im.bci.nanimstudio.NanimationEditor nanimationEditor;
+    private im.bci.nanimstudio.NimagesEditor nimagesEditor;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
