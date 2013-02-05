@@ -5,13 +5,18 @@
 package im.bci.nanimstudio;
 
 import im.bci.nanimstudio.model.NanimStudioModel;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author bob
  */
 public class NanimStudioMainWindow extends javax.swing.JFrame {
+
     private final NanimStudioModel nanimStudio;
+    private File lastFile;
 
     /**
      * Creates new form NanimStudioMainWindow
@@ -110,15 +115,30 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
         openMenuItem.setMnemonic('o');
         openMenuItem.setText("Open");
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(openMenuItem);
 
         saveMenuItem.setMnemonic('s');
         saveMenuItem.setText("Save");
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveMenuItem);
 
         saveAsMenuItem.setMnemonic('a');
         saveAsMenuItem.setText("Save As ...");
         saveAsMenuItem.setDisplayedMnemonicIndex(5);
+        saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveAsMenuItem);
 
         exitMenuItem.setMnemonic('x');
@@ -154,7 +174,34 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
     private void jMenuItem_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_newActionPerformed
         nanim.clear();
+        lastFile = null;
     }//GEN-LAST:event_jMenuItem_newActionPerformed
+
+    private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastNanimDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("nanim animations", "nanim", "nanim"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
+            nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.saveAs(chooser.getSelectedFile());
+            lastFile = chooser.getSelectedFile();
+        }
+    }//GEN-LAST:event_saveAsMenuItemActionPerformed
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        if (null != lastFile) {
+            nanim.saveAs(lastFile);
+        }
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastNanimDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("nanim animations", "nanim", "nanim"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
+            nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.open(chooser.getSelectedFile());
+            lastFile = chooser.getSelectedFile();
+        }
+    }//GEN-LAST:event_openMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
