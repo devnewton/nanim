@@ -64,4 +64,12 @@ public class Nanimation {
         }
         propertyChangeSupport.firePropertyChange("frames", oldFrames, frames);
     }
+
+    public int getTotalDuration() {
+        int total = 0;
+        for(Nframe frame : frames) {
+            total += frame.getDuration();
+        }
+        return total;
+    }
 }

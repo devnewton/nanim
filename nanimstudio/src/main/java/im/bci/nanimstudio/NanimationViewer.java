@@ -5,11 +5,10 @@
 package im.bci.nanimstudio;
 
 import im.bci.nanimstudio.model.Nanimation;
-import java.awt.Canvas;
+import im.bci.nanimstudio.model.Nframe;
 import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.image.BufferedImage;
+import javax.swing.JPanel;
 
 /**
  *
@@ -18,63 +17,53 @@ import java.util.logging.Logger;
 public class NanimationViewer extends javax.swing.JPanel {
 
     private Nanimation animation;
-    private final RenderingThread renderingThread;
 
     public Nanimation getAnimation() {
         return animation;
     }
 
     public void setAnimation(Nanimation animation) {
-        renderingThread.setAnimation(animation);
         this.animation = animation;
     }
 
-    private class RenderingThread extends Thread {
+    private class RenderingPanel extends JPanel implements Runnable {
 
         int c = 1;
-        private final Canvas canvas;
 
-        private RenderingThread(Canvas canvas) {
-            setDaemon(true);
-            this.canvas = canvas;
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+            if (null != animation && !animation.getFrames().isEmpty()) {
+                Nframe currentFrame = getCurrentFrame();
+                BufferedImage image = currentFrame.getImage();
+                if(null != image) {
+                    g.translate(getWidth() / 2 - image.getWidth() / 2, getHeight()/2 - image.getHeight() / 2);
+                    g.drawImage(image, 0, 0, null);
+                }
+            }
         }
 
         @Override
         public void run() {
             try {
-                while (!canvas.isVisible()) {
-
-                    RenderingThread.sleep(100);
-
-                }
-                canvas.createBufferStrategy(2);
-                BufferStrategy bs = canvas.getBufferStrategy();
                 for (;;) {
-                    Graphics g = bs.getDrawGraphics();
-                    try {
-                        g.drawOval(0, 0, c, c);
-                        ++c;
-                        if (c > 100) {
-                            c = 1;
-                        }
-                    } finally {
-                        g.dispose();
-                    }
-                    bs.show();
-                    RenderingThread.sleep(1);
+                    repaint();
+                    Thread.sleep(2);
                 }
             } catch (InterruptedException ex) {
-                return;
             }
         }
 
-        private void setAnimation(Nanimation animation) {
-            if (null != animation) {
-                if (!isAlive()) {
-                    start();
+        private Nframe getCurrentFrame() {
+            int animationDuration = animation.getTotalDuration();
+            long currentTime = animationDuration != 0 ? System.currentTimeMillis() % animationDuration : 0;
+            for (Nframe frame : animation.getFrames()) {
+                currentTime -= frame.getDuration();
+                if (currentTime <= 0) {
+                    return frame;
                 }
             }
-
+            return animation.getFrames().get(0);
         }
     }
 
@@ -83,12 +72,9 @@ public class NanimationViewer extends javax.swing.JPanel {
      */
     public NanimationViewer() {
         initComponents();
-        jPanel_animation.setIgnoreRepaint(true);
-        Canvas canvas = new Canvas();
-        canvas.setIgnoreRepaint(true);
-        jPanel_animation.add(canvas);
+        Thread animator = new Thread((RenderingPanel) jPanel_animation);
+        animator.start();
 
-        this.renderingThread = new RenderingThread(canvas);
     }
 
     /**
@@ -101,30 +87,23 @@ public class NanimationViewer extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jPanel_animation = new javax.swing.JPanel();
+        jPanel_animation = new RenderingPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("play once");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        add(jButton1, gridBagConstraints);
-
-        jButton2.setText("play loop");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        add(jButton2, gridBagConstraints);
-
         jPanel_animation.setBackground(new java.awt.Color(204, 204, 255));
-        jPanel_animation.setLayout(new javax.swing.BoxLayout(jPanel_animation, javax.swing.BoxLayout.LINE_AXIS));
+
+        javax.swing.GroupLayout jPanel_animationLayout = new javax.swing.GroupLayout(jPanel_animation);
+        jPanel_animation.setLayout(jPanel_animationLayout);
+        jPanel_animationLayout.setHorizontalGroup(
+            jPanel_animationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 601, Short.MAX_VALUE)
+        );
+        jPanel_animationLayout.setVerticalGroup(
+            jPanel_animationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 325, Short.MAX_VALUE)
+        );
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -135,8 +114,6 @@ public class NanimationViewer extends javax.swing.JPanel {
         add(jPanel_animation, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel_animation;
     // End of variables declaration//GEN-END:variables
 }

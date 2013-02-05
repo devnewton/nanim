@@ -26,6 +26,7 @@ public class NanimationEditor extends javax.swing.JPanel {
     public void setSelectedAnimation(Nanimation newSelectedAnimation) {
         Nanimation oldValue = selectedAnimation;
         selectedAnimation = newSelectedAnimation;
+        nanimationViewer1.setAnimation(selectedAnimation);
         firePropertyChange("selectedAnimation", oldValue, selectedAnimation);
     }
 
@@ -63,7 +64,7 @@ public class NanimationEditor extends javax.swing.JPanel {
         org.jdesktop.swingbinding.JListBinding jListBinding = org.jdesktop.swingbinding.SwingBindings.createJListBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, nanim, eLProperty, jList_animations);
         jListBinding.setDetailBinding(org.jdesktop.beansbinding.ELProperty.create("${name}"));
         bindingGroup.addBinding(jListBinding);
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, nanimationViewer1, org.jdesktop.beansbinding.ELProperty.create("${animation}"), jList_animations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, org.jdesktop.beansbinding.ELProperty.create("${selectedAnimation}"), jList_animations, org.jdesktop.beansbinding.BeanProperty.create("selectedElement"));
         bindingGroup.addBinding(binding);
 
         jScrollPane1.setViewportView(jList_animations);
