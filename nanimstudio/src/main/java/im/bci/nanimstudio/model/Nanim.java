@@ -5,6 +5,8 @@
 package im.bci.nanimstudio.model;
 
 import com.google.protobuf.ByteString;
+import com.madgag.gif.fmsware.AnimatedGifEncoder;
+import com.madgag.gif.fmsware.GifDecoder;
 import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParserUtils;
@@ -239,10 +241,10 @@ public class Nanim {
                     nimage.setName(image.getName());
                     nimage.setImage(decodeImage(image));
                 }
-                for(NanimParser.Animation animation : nanim.getAnimationsList())   {
+                for (NanimParser.Animation animation : nanim.getAnimationsList()) {
                     Nanimation nanimation = addNewAnimation();
                     nanimation.setName(animation.getName());
-                    for(NanimParser.Frame frame : animation.getFramesList()) {
+                    for (NanimParser.Frame frame : animation.getFramesList()) {
                         Nframe nframe = nanimation.addNewFrame();
                         nframe.setDuration(frame.getDuration());
                         nframe.setU1(frame.getU1());
@@ -274,5 +276,33 @@ public class Nanim {
                 break;
         }
         return outputImage;
+    }
+
+    public void openGIF(File file) {
+        clear();
+        GifDecoder decoder = new GifDecoder();
+        decoder.read(file.getAbsolutePath());
+        Nanimation nanimation = addNewAnimation();
+        for (int i = 0; i < decoder.getFrameCount(); ++i) {
+            Nimage nimage = addNewImage();
+            nimage.setImage(decoder.getFrame(i));
+            Nframe nframe = nanimation.addNewFrame();
+            nframe.setDuration(decoder.getDelay(i));
+            nframe.setNimage(nimage);
+        }
+        System.out.println("gif successfully written to " + file.getAbsolutePath());
+    }
+
+    public void saveGIF(File file) {
+        AnimatedGifEncoder encoder = new AnimatedGifEncoder();
+        encoder.start(file.getAbsolutePath());
+        encoder.setRepeat(0);
+        for (Nanimation animation : animations) {
+            for (Nframe nframe : animation.getFrames()) {
+                encoder.setDelay(nframe.getDuration());
+                encoder.addFrame(nframe.getImage());
+            }
+        }
+        encoder.finish();
     }
 }

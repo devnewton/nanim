@@ -50,7 +50,9 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         openMenuItem = new javax.swing.JMenuItem();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem_importGIF = new javax.swing.JMenuItem();
+        jMenuItem_exportGIF = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -140,15 +142,23 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             }
         });
         fileMenu.add(saveAsMenuItem);
+        fileMenu.add(jSeparator1);
 
-        exitMenuItem.setMnemonic('x');
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem_importGIF.setText("Import GIF...");
+        jMenuItem_importGIF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
+                jMenuItem_importGIFActionPerformed(evt);
             }
         });
-        fileMenu.add(exitMenuItem);
+        fileMenu.add(jMenuItem_importGIF);
+
+        jMenuItem_exportGIF.setText("Export GIF...");
+        jMenuItem_exportGIF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_exportGIFActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_exportGIF);
 
         menuBar.add(fileMenu);
 
@@ -167,10 +177,6 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void jMenuItem_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_newActionPerformed
         nanim.clear();
@@ -202,6 +208,24 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             lastFile = chooser.getSelectedFile();
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
+
+    private void jMenuItem_importGIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_importGIFActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastGifDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("gif animations", "gif", "gif"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
+            nanimStudio.getPreferences().put("lastGifDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.openGIF(chooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_jMenuItem_importGIFActionPerformed
+
+    private void jMenuItem_exportGIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exportGIFActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastGifDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("gif animations", "gif", "gif"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
+            nanimStudio.getPreferences().put("lastGifDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.saveGIF(chooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_jMenuItem_exportGIFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,13 +263,15 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenuItem jMenuItem_exportGIF;
+    private javax.swing.JMenuItem jMenuItem_importGIF;
     private javax.swing.JMenuItem jMenuItem_new;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     private im.bci.nanimstudio.NframesEditor nFramesEditor1;
     private im.bci.nanimstudio.model.Nanim nanim;
