@@ -1,0 +1,3 @@
+#!/bin/sh
+java -jar ${NANIM_HOME}/bin/font2nanim-1.0-SNAPSHOT.jar $*
+
