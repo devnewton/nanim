@@ -5,6 +5,8 @@
 package im.bci.nanimstudio;
 
 import im.bci.nanimstudio.model.NanimStudioModel;
+import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
+import im.bci.nanimstudio.tools.OptimizeDialog;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -53,19 +55,19 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem_importGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        aboutMenuItem = new javax.swing.JMenuItem();
+        jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem_optimize = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("nanimstudio");
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
         getContentPane().add(nimagesEditor, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -160,16 +162,27 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem_exportGIF);
 
+        jMenuItem_export_png_spritesheet.setText("Export PNG spritesheet...");
+        jMenuItem_export_png_spritesheet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_export_png_spritesheetActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_export_png_spritesheet);
+
         menuBar.add(fileMenu);
 
-        helpMenu.setMnemonic('h');
-        helpMenu.setText("Help");
+        jMenu1.setText("Tools");
 
-        aboutMenuItem.setMnemonic('a');
-        aboutMenuItem.setText("About");
-        helpMenu.add(aboutMenuItem);
+        jMenuItem_optimize.setText("Optimize");
+        jMenuItem_optimize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_optimizeActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem_optimize);
 
-        menuBar.add(helpMenu);
+        menuBar.add(jMenu1);
 
         setJMenuBar(menuBar);
 
@@ -227,17 +240,28 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_exportGIFActionPerformed
 
+    private void jMenuItem_optimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_optimizeActionPerformed
+        OptimizeDialog dialog = new OptimizeDialog(this, true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_optimizeActionPerformed
+
+    private void jMenuItem_export_png_spritesheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_export_png_spritesheetActionPerformed
+        GenerateSpriteSheetDialog dialog = new GenerateSpriteSheetDialog(this, true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_export_png_spritesheetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem_exportGIF;
+    private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
     private javax.swing.JMenuItem jMenuItem_new;
+    private javax.swing.JMenuItem jMenuItem_optimize;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     private im.bci.nanimstudio.NframesEditor nFramesEditor1;

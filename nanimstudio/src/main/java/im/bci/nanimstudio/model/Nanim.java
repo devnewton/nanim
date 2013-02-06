@@ -10,12 +10,12 @@ import com.madgag.gif.fmsware.GifDecoder;
 import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParserUtils;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -169,16 +169,9 @@ public class Nanim {
 
     public void saveAs(File file) {
         try {
-            NanimParser.Nanim.Builder nanimBuilder = NanimParser.Nanim.newBuilder();
-            for (Nimage nimage : images) {
-                nanimBuilder.addImages(encodeImage(nimage));
-            }
-            for (Nanimation nanimation : animations) {
-                nanimBuilder.addAnimations(encodeAnimation(nanimation));
-            }
             FileOutputStream os = new FileOutputStream(file);
             try {
-                nanimBuilder.build().writeTo(os);
+                buildProtobufNanim().writeTo(os);
                 System.out.println("nanim successfully written to " + file.getAbsolutePath());
             } finally {
                 os.flush();
@@ -231,36 +224,38 @@ public class Nanim {
     }
 
     public void open(File file) {
-        clear();
         try {
             FileInputStream is = new FileInputStream(file);
             try {
-                NanimParser.Nanim nanim = NanimParser.Nanim.parseFrom(is);
-                for (NanimParser.Image image : nanim.getImagesList()) {
-                    Nimage nimage = addNewImage();
-                    nimage.setName(image.getName());
-                    nimage.setImage(decodeImage(image));
-                }
-                for (NanimParser.Animation animation : nanim.getAnimationsList()) {
-                    Nanimation nanimation = addNewAnimation();
-                    nanimation.setName(animation.getName());
-                    for (NanimParser.Frame frame : animation.getFramesList()) {
-                        Nframe nframe = nanimation.addNewFrame();
-                        nframe.setDuration(frame.getDuration());
-                        nframe.setU1(frame.getU1());
-                        nframe.setV1(frame.getV1());
-                        nframe.setU2(frame.getU2());
-                        nframe.setV2(frame.getV2());
-                        nframe.setNimage(findImageByName(frame.getImageName()));
-                    }
-                }
+                loadProtobufNanim(NanimParser.Nanim.parseFrom(is));
             } finally {
                 is.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
+    public void loadProtobufNanim(NanimParser.Nanim nanim) {
+        clear();
+        for (NanimParser.Image image : nanim.getImagesList()) {
+            Nimage nimage = addNewImage();
+            nimage.setName(image.getName());
+            nimage.setImage(decodeImage(image));
+        }
+        for (NanimParser.Animation animation : nanim.getAnimationsList()) {
+            Nanimation nanimation = addNewAnimation();
+            nanimation.setName(animation.getName());
+            for (NanimParser.Frame frame : animation.getFramesList()) {
+                Nframe nframe = nanimation.addNewFrame();
+                nframe.setDuration(frame.getDuration());
+                nframe.setU1(frame.getU1());
+                nframe.setV1(frame.getV1());
+                nframe.setU2(frame.getU2());
+                nframe.setV2(frame.getV2());
+                nframe.setNimage(findImageByName(frame.getImageName()));
+            }
+        }
     }
 
     private BufferedImage decodeImage(Image image) {
@@ -304,5 +299,64 @@ public class Nanim {
             }
         }
         encoder.finish();
+    }
+
+    public im.bci.nanim.NanimParser.Nanim buildProtobufNanim() {
+        NanimParser.Nanim.Builder nanimBuilder = NanimParser.Nanim.newBuilder();
+        for (Nimage nimage : images) {
+            nanimBuilder.addImages(encodeImage(nimage));
+        }
+        for (Nanimation nanimation : animations) {
+            nanimBuilder.addAnimations(encodeAnimation(nanimation));
+        }
+        return nanimBuilder.build();
+    }
+
+    public void generateSpriteSheet(File file, SpriteSheetType type) {
+        int maxWidth = 0, maxHeight = 0, totalWidth = 0, totalHeight = 0;
+        for (Nanimation animation : animations) {
+            for (Nframe nframe : animation.getFrames()) {
+                maxWidth = Math.max(maxWidth, nframe.getImage().getWidth());
+                maxHeight = Math.max(maxHeight, nframe.getImage().getHeight());
+                totalWidth += nframe.getImage().getWidth();
+                totalHeight += nframe.getImage().getWidth();
+            }
+        }
+        BufferedImage spriteSheet;
+        switch (type) {
+            case HORIZONTAL:
+                spriteSheet = new BufferedImage(totalWidth, maxHeight, BufferedImage.TYPE_INT_ARGB);
+                break;
+            case VERTICAL:
+                spriteSheet = new BufferedImage(maxWidth, totalHeight, BufferedImage.TYPE_INT_ARGB);
+                break;
+            default:
+                return;
+        }
+        int x = 0, y = 0;
+        Graphics g = spriteSheet.getGraphics();
+        try {
+            for (Nanimation animation : animations) {
+                for (Nframe nframe : animation.getFrames()) {
+                    g.drawImage(nframe.getImage(), x, y, null);
+                    switch (type) {
+                        case HORIZONTAL:
+                            x += nframe.getImage().getWidth();
+                            break;
+                        case VERTICAL:
+                            y += nframe.getImage().getHeight();
+                            break;
+                    }
+                }
+            }
+        } finally {
+            g.dispose();
+        }
+        try {
+            ImageIO.write(spriteSheet, "png", file);
+        } catch (IOException ex) {
+            Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }

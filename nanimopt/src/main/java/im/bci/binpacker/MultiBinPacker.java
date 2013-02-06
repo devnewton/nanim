@@ -9,7 +9,7 @@ public class MultiBinPacker {
 	public MultiBinPackerOut pack(MultiBinPackerIn in) {
 		List<Dimension> possibleTextureDimensions = in.possibleTextureDimensions;
 		if(null == in.possibleTextureDimensions) {
-			possibleTextureDimensions = createDefaultPossibleTextureDimensions(in.images);
+			possibleTextureDimensions = createDefaultPossibleTextureDimensions();
 		}
 		MultiBinPackerOut out = new MultiBinPackerOut();
 		BinPacker packer = new BinPacker();
@@ -38,7 +38,7 @@ public class MultiBinPacker {
 		return out;
 	}
 
-	private static List<Dimension> createDefaultPossibleTextureDimensions(List<PackableImage> images) {
+	public static List<Dimension> createDefaultPossibleTextureDimensions() {
 		List<Dimension> dimensions = new ArrayList<Dimension>();
 		for(int n=16; n<=1024; n *= 2 ) {
 			dimensions.add(new Dimension(n, n));
