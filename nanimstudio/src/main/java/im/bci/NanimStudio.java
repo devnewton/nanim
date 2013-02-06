@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012 devnewton <devnewton@bci.im>
+ * Copyright (c) 2013 devnewton <devnewton@bci.im>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
