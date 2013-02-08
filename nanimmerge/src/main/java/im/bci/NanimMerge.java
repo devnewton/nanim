@@ -77,7 +77,7 @@ public class NanimMerge {
         }
 
         for (File inputFile : nanimMerge.inputFiles) {
-            Nanim nanim = nanimMerge.decode(inputFile);
+            Nanim nanim = decode(inputFile);
             nanimMerge.merge(nanim);
         }
         nanimMerge.completeMerge();

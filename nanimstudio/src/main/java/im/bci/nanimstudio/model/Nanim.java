@@ -35,6 +35,7 @@ import com.google.protobuf.ByteString;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
 import im.bci.NanimMerge;
+import im.bci.Sheet2Nanim;
 import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParserUtils;
@@ -388,12 +389,26 @@ public class Nanim {
         
     }
 
-    public void mergeWith(File[] selectedFiles) throws IOException {
+    public void mergeWith(File[] selectedFiles) {
        NanimMerge merge = new NanimMerge();
        merge.merge(this.buildProtobufNanim());
        for(File f : selectedFiles) {
-           merge.merge(f);
+            try {
+                merge.merge(f);
+            } catch (IOException ex) {
+                Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+            }
        }
        loadProtobufNanim(merge.getMergedNanim());
+    }
+
+    public void importSpriteSheet(File file, Integer frameWidth, Integer frameHeight, Integer frameDuration) {
+        try {
+            Sheet2Nanim sheet2nanim = new Sheet2Nanim(file, frameWidth, frameHeight, frameDuration);
+            sheet2nanim.convert();
+            loadProtobufNanim(sheet2nanim.getNanim());
+        } catch (IOException ex) {
+            Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

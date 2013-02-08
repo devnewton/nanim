@@ -31,131 +31,108 @@
  */
 package im.bci;
 
+import com.google.protobuf.ByteString;
+import im.bci.nanim.NanimParser.Animation;
+import im.bci.nanim.NanimParser.Frame;
+import im.bci.nanim.NanimParser.Image;
+import im.bci.nanim.NanimParser.Nanim;
+import im.bci.nanim.NanimParser.PixelFormat;
+import im.bci.nanim.NanimParserUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-
 import javax.imageio.ImageIO;
-
-import im.bci.nanim.NanimParser.Animation;
-import im.bci.nanim.NanimParser.Nanim;
-import im.bci.nanim.NanimParser.PixelFormat;
-import im.bci.nanim.NanimParser.Frame;
-import im.bci.nanim.NanimParser.Image;
-import im.bci.nanim.NanimParserUtils;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
-import com.google.protobuf.ByteString;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 
 public class Sheet2Nanim {
 
     private Nanim nanim;
-    private CommandLine commandLine;
+    @Option(name = "-w", required = true, usage = "frame width")
+    private int frameWidth;
+    @Option(name = "-h", required = true, usage = "frame height")
+    private int frameHeight;
+    @Option(name = "-a", usage = "animation name")
+    private String animationName = "animation0";
+    @Option(name = "-d", usage = "frame duration in ms")
+    private int frameDuration = 100;
+    @Option(name = "-author", usage = "set author metadata")
+    private String author;
+    @Option(name = "-license", usage = "set license metadata")
+    private String license;
 
-    public Sheet2Nanim(CommandLine line) {
-        this.commandLine = line;
+    public Sheet2Nanim() {
     }
 
-    public static void main(String[] args) throws ParseException, IOException {
-        Options options = new Options();
-        options.addOption("w", true, "frame width");
-        options.addOption("h", true, "frame height");
-        options.addOption("a", true, "animation name");
-        options.addOption("d", true, "frame duration in ms");
-        options.addOption("s", true, "sprite sheet filename");
-        options.addOption("author", true, "set author metadata");
-        options.addOption("license", true, "set license metadata");
-        options.addOption("o", true, "ouput file name");
+    public Sheet2Nanim(File inputSpriteSheetFile, int frameWidth, int frameHeight, int frameDuration) {
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+        this.frameDuration = frameDuration;
+        this.inputSpriteSheetFile = inputSpriteSheetFile;
+    }
+    @Option(name = "-o", usage = "output file name")
+    private File outputFile = new File("output.nanim");
+    @Argument(required = true)
+    private File inputSpriteSheetFile;
 
-        if (args.length == 0) {
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("sheet2nanim [args]", options);
-            System.out.println("Supported image formats: " + Arrays.toString(ImageIO.getReaderFormatNames()));
+    public static void main(String[] args) throws IOException {
+        Sheet2Nanim sheet2nanim = new Sheet2Nanim();
+        CmdLineParser parser = new CmdLineParser(sheet2nanim);
+        try {
+
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            System.err.println(e.getMessage());
+            System.err.println("sheet2nanim [args] spritesheet.png");
+            parser.printUsage(System.err);
             return;
         }
-        GnuParser parser = new GnuParser();
-        CommandLine line = parser.parse(options, args);
-
-        Sheet2Nanim nanimEnc = new Sheet2Nanim(line);
-        nanimEnc.encode();
-        nanimEnc.save();
+        sheet2nanim.convert();
+        sheet2nanim.save();
     }
 
     private void save() throws IOException {
-        String output = commandLine.getOptionValue("o", "output.nanim");
-        FileOutputStream os = new FileOutputStream(output);
+        FileOutputStream os = new FileOutputStream(outputFile);
         try {
             nanim.writeTo(os);
-            System.out.println("nanim successfully written to " + output);
+            System.out.println("nanim successfully written to " + outputFile);
         } finally {
             os.flush();
             os.close();
         }
     }
 
-    private void encode() throws IOException {
-        Nanim.Builder animationCollectionBuilder = Nanim.newBuilder();
-        Animation.Builder currentAnimationBuilder = null;
-        int currentDuration = 0;
-        LinkedHashMap<String, Image.Builder> images = new LinkedHashMap<String, Image.Builder>();
-        int currentWidth = 32;
-        int currentHeight = 32;
-        for (Option option : commandLine.getOptions()) {
-            String optName = option.getOpt();
-            if (optName.equals("a")) {
-                if (null != currentAnimationBuilder) {
-                    animationCollectionBuilder.addAnimations(currentAnimationBuilder);
-                }
-                currentAnimationBuilder = Animation.newBuilder();
-                currentAnimationBuilder.setName(option.getValue());
-            } else if (optName.equals("d")) {
-                currentDuration = Integer.parseInt(option.getValue());
-            } else if (optName.equals("w")) {
-                currentWidth = Integer.parseInt(option.getValue());
-            } else if (optName.equals("h")) {
-                currentHeight = Integer.parseInt(option.getValue());
-            } else if (optName.equals("s")) {
-                if (null != currentAnimationBuilder) {
-                    File imageFile = new File(option.getValue());
-                    Image.Builder imageBuilder = encodeImage(imageFile);
-                    images.put(imageFile.getName(), imageBuilder);
-                    float tw = (float)currentWidth / (float)imageBuilder.getWidth();
-                    float th = (float)currentHeight / (float)imageBuilder.getHeight();
-                    for (float v = 0.0f; v < 1.0f; v += th) {
-                        for (float u = 0.0f; u < 1.0f; u += tw) {
-                            Frame.Builder frame = Frame.newBuilder().setDuration(currentDuration).setImageName(imageFile.getName()).setU1(u).setU2(u+tw).setV1(v).setV2(v+th);
-                            currentAnimationBuilder.addFrames(frame);
-                        }
-                    }
-
-                }
+    public void convert() throws IOException {
+        Nanim.Builder nanimBuilder = Nanim.newBuilder();
+        if (null != author) {
+            nanimBuilder.setAuthor(author);
+        }
+        if (null != license) {
+            nanimBuilder.setLicense(license);
+        }
+        Image image = encodeImage(inputSpriteSheetFile).build();
+        nanimBuilder.addImages(image);
+        Animation.Builder animation = Animation.newBuilder();
+        animation.setName(animationName);
+        float tw = (float) frameWidth / (float) image.getWidth();
+        float th = (float) frameHeight / (float) image.getHeight();
+        for (float v = 0.0f; v < 1.0f; v += th) {
+            for (float u = 0.0f; u < 1.0f; u += tw) {
+                Frame.Builder frame = Frame.newBuilder().setDuration(frameDuration).setImageName(image.getName()).setU1(u).setU2(u + tw).setV1(v).setV2(v + th);
+                animation.addFrames(frame);
             }
         }
-        if (null != currentAnimationBuilder) {
-            animationCollectionBuilder.addAnimations(currentAnimationBuilder);
-        }
-        for (Image.Builder image : images.values()) {
-            animationCollectionBuilder.addImages(image);
-        }
-        String author = commandLine.getOptionValue("author");
-        if (null != author) {
-            animationCollectionBuilder.setAuthor(author);
-        }
-        String license = commandLine.getOptionValue("license");
-        if (null != license) {
-            animationCollectionBuilder.setLicense(license);
-        }
+        nanimBuilder.addAnimations(animation);
+        nanim = nanimBuilder.build();
+    }
 
-        nanim = animationCollectionBuilder.build();
+    public Nanim getNanim() {
+        return nanim;
     }
 
     private Image.Builder encodeImage(File imageFile) throws IOException {

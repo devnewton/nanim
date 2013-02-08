@@ -33,6 +33,7 @@ package im.bci.nanimstudio;
 
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
+import im.bci.nanimstudio.tools.ImportSpriteSheetDialog;
 import im.bci.nanimstudio.tools.OptimizeDialog;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -82,6 +83,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem_importGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF = new javax.swing.JMenuItem();
+        jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem_optimize = new javax.swing.JMenuItem();
@@ -190,6 +192,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem_exportGIF);
 
+        jMenuItem_import_png_spritesheet.setText("Import PNG spritesheet...");
+        jMenuItem_import_png_spritesheet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_import_png_spritesheetActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_import_png_spritesheet);
+
         jMenuItem_export_png_spritesheet.setText("Export PNG spritesheet...");
         jMenuItem_export_png_spritesheet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -296,6 +306,11 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_merge_withActionPerformed
 
+    private void jMenuItem_import_png_spritesheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_import_png_spritesheetActionPerformed
+       ImportSpriteSheetDialog dialog = new ImportSpriteSheetDialog(this, true);
+       dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_import_png_spritesheetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
@@ -306,6 +321,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_exportGIF;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
+    private javax.swing.JMenuItem jMenuItem_import_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_merge_with;
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuItem jMenuItem_optimize;
