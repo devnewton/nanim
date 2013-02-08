@@ -85,6 +85,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem_optimize = new javax.swing.JMenuItem();
+        jMenuItem_merge_with = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("nanimstudio");
@@ -209,6 +210,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem_optimize);
 
+        jMenuItem_merge_with.setText("Merge with...");
+        jMenuItem_merge_with.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_merge_withActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem_merge_with);
+
         menuBar.add(jMenu1);
 
         setJMenuBar(menuBar);
@@ -277,6 +286,16 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem_export_png_spritesheetActionPerformed
 
+    private void jMenuItem_merge_withActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_merge_withActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastNanimDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("nanim animations", "nanim", "nanim"));
+        chooser.setMultiSelectionEnabled(true);
+        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
+            nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.mergeWith(chooser.getSelectedFiles());
+        }
+    }//GEN-LAST:event_jMenuItem_merge_withActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
@@ -287,6 +306,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_exportGIF;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
+    private javax.swing.JMenuItem jMenuItem_merge_with;
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuItem jMenuItem_optimize;
     private javax.swing.JPopupMenu.Separator jSeparator1;

@@ -34,6 +34,7 @@ package im.bci.nanimstudio.model;
 import com.google.protobuf.ByteString;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
+import im.bci.NanimMerge;
 import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParserUtils;
@@ -385,5 +386,14 @@ public class Nanim {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    public void mergeWith(File[] selectedFiles) throws IOException {
+       NanimMerge merge = new NanimMerge();
+       merge.merge(this.buildProtobufNanim());
+       for(File f : selectedFiles) {
+           merge.merge(f);
+       }
+       loadProtobufNanim(merge.getMergedNanim());
     }
 }

@@ -28,6 +28,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimmerge</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>hu.kazocsaba</groupId>
             <artifactId>image-viewer</artifactId>
             <version>1.2.3</version>
