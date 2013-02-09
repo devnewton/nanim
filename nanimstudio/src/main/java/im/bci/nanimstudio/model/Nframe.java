@@ -33,6 +33,8 @@ package im.bci.nanimstudio.model;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,7 +42,7 @@ import java.util.logging.Logger;
  *
  * @author bob
  */
-public class Nframe {
+public class Nframe implements PropertyChangeListener{
 
     private int index;
     private int duration;
@@ -53,7 +55,11 @@ public class Nframe {
     }
 
     public void setNimage(Nimage nimage) {
+        if(null != nimage) {
+            nimage.removePropertyChangeListener(this);
+        }
         this.nimage = nimage;
+        nimage.addPropertyChangeListener(this);
         updateImage();
     }
 
@@ -125,6 +131,13 @@ public class Nframe {
                 Logger.getLogger(getClass().getName()).log(Level.WARNING, "Cannot get frame image", ex);
                 image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
             }
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if(nimage == event.getSource() ) {
+            updateImage();
         }
     }
 }
