@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar ${NANIM_HOME}/bin/nanimdec-1.0-SNAPSHOT.jar $*
+java -jar ${NANIM_HOME}/bin/nanimdec-1.0.jar $*

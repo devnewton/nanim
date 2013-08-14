@@ -1,3 +1,3 @@
 #!/bin/sh
-java -jar ${NANIM_HOME}/bin/nanimspeed-1.0-SNAPSHOT.jar $*
+java -jar ${NANIM_HOME}/bin/nanimspeed-1.0.jar $*
 
