@@ -84,6 +84,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem_importGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF = new javax.swing.JMenuItem();
+        jMenuItem_exportGIF1 = new javax.swing.JMenuItem();
         jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -192,6 +193,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             }
         });
         fileMenu.add(jMenuItem_exportGIF);
+
+        jMenuItem_exportGIF1.setText("Export APNG...");
+        jMenuItem_exportGIF1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_exportAPNGActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_exportGIF1);
 
         jMenuItem_import_png_spritesheet.setText("Import PNG spritesheet...");
         jMenuItem_import_png_spritesheet.addActionListener(new java.awt.event.ActionListener() {
@@ -312,6 +321,15 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
        dialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem_import_png_spritesheetActionPerformed
 
+    private void jMenuItem_exportAPNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exportAPNGActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastApngDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("png animations", "png", "png"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
+            nanimStudio.getPreferences().put("lastApngDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.saveAPNG(chooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_jMenuItem_exportAPNGActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
@@ -320,6 +338,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem_exportGIF;
+    private javax.swing.JMenuItem jMenuItem_exportGIF1;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
     private javax.swing.JMenuItem jMenuItem_import_png_spritesheet;
