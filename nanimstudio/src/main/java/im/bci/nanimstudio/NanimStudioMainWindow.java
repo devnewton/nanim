@@ -45,7 +45,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class NanimStudioMainWindow extends javax.swing.JFrame {
 
-    private final NanimStudioModel nanimStudio;
+	private static final long serialVersionUID = 1L;
+	private final NanimStudioModel nanimStudio;
     private File lastFile;
 
     /**
