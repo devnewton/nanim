@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar dirname $(dirname $0)/sheet2nanim-${nanim_version}.jar $*

@@ -5,5 +5,4 @@ To build the nanim tools, you must have a working installation of:
 
 Then run 'mvn clean install" in the root sdk directory.
 
-After the build copy the generated **/target/nanim*.jar files in the bin directory
-and read the installation instructions.
+Then use the installer jar.

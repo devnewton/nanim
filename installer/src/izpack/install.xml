@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<installation version="1.0">
+    <info>
+        <appname>@{project.name}</appname>
+        <appversion>@{project.version}</appversion>
+        <appsubpath>nanim</appsubpath>
+        <authors>
+            <author name="devnewton" email="devnewton@bci.Im" />
+        </authors>
+        <url>http://devnewton.bci.im</url>
+        <javaversion>1.6</javaversion>
+        <requiresjdk>no</requiresjdk>
+    </info>
+ 
+    <guiprefs width="800" height="480" resizable="yes" />
+ 
+    <locale>
+        <langpack iso3="eng" />
+    </locale>
+
+    <variables>
+        <variable name="nanim_version" value="@{project.version}"/>
+        <variable name="ShowCreateDirectoryMessage" value="false"/>
+    </variables>
+
+    <resources>
+        <res id="Installer.image" src="../../src/izpack/cover.png" />
+        <res src="../../src/izpack/Win_shortcutSpec.xml" id="Win_shortcutSpec.xml" parse="yes"/>
+        <res src="../../src/izpack/Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" parse="yes"/>
+    </resources>
+ 
+    <panels>
+        <panel classname="HelloPanel" />
+        <panel classname="TargetPanel"/>       
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>     
+        <panel classname="SimpleFinishPanel" />
+    </panels>
+ 
+    <packs>
+        <pack name="Core" required="yes">
+            <description>Core installation files</description>
+            <file src="../../../font2nanim/target/font2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            <file src="../../../gif2nanim/target/gif2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            <file src="../../../nanimenc/target/nanimenc-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            <file src="../../../nanimdec/target/nanimdec-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            <file src="../../../nanimls/target/nanimls-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nanimmerge/target/nanimmerge-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nanimrename/target/nanimrename-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nanimspeed/target/nanimspeed-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nanimview/target/nanimview-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nanimopt/target/nanimopt-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../sheet2nanim/target/sheet2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nimageopt/target/nimageopt-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
+            <file src="../../../nanimstudio/target/nanimstudio-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            <file src="../../../nimageopt/target/nimageopt-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            
+            <file src="../../src/izpack/launchers/font2nanim" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/gif2nanim" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/nanimenc" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/nanimdec" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/nanimls" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nanimmerge" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nanimrename" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nanimspeed" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nanimview" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nanimopt" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/sheet2nanim" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nimageopt" targetdir="$INSTALL_PATH" />    
+            <file src="../../src/izpack/launchers/nanimstudio" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/nimageopt" targetdir="$INSTALL_PATH" />
+            
+            <file src="../../src/izpack/icon.ico" targetdir="$INSTALL_PATH" />
+            <file src="../../../readme.txt" targetdir="$INSTALL_PATH" />
+            <file src="../../src/main/resources/icon.png" targetdir="$INSTALL_PATH" />
+            <file src="../../../license.txt" targetdir="$INSTALL_PATH" />
+          
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/gif2nanim-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimenc-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimdec-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimls-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimmerge-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimrename-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimspeed-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimview-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimopt-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/sheet2nanim-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nimageopt-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimstudio-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nimageopt-@{project.version}.jar"/>
+            
+            <parsable targetfile="$INSTALL_PATH/font2nanim"/>
+            <parsable targetfile="$INSTALL_PATH/gif2nanim"/>
+            <parsable targetfile="$INSTALL_PATH/nanimenc"/>
+            <parsable targetfile="$INSTALL_PATH/nanimdec"/>
+            <parsable targetfile="$INSTALL_PATH/nanimls"/>
+            <parsable targetfile="$INSTALL_PATH/nanimmerge"/>
+            <parsable targetfile="$INSTALL_PATH/nanimrename"/>
+            <parsable targetfile="$INSTALL_PATH/nanimspeed"/>
+            <parsable targetfile="$INSTALL_PATH/nanimview"/>
+            <parsable targetfile="$INSTALL_PATH/nanimopt"/>
+            <parsable targetfile="$INSTALL_PATH/sheet2nanim"/>
+            <parsable targetfile="$INSTALL_PATH/nimageopt"/>
+            <parsable targetfile="$INSTALL_PATH/nanimstudio"/>
+            <parsable targetfile="$INSTALL_PATH/nimageopt"/>            
+            
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/gif2nanim"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimenc"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimdec"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimls"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimmerge"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimrename"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimspeed"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimview"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimopt"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/sheet2nanim"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nimageopt"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimstudio"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nimageopt"/>
+
+        </pack>
+    </packs>
+
+    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
+ 
+</installation>
+

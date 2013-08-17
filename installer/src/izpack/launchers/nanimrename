@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar dirname $(dirname $0)/nanimrename-${nanim_version}.jar $*

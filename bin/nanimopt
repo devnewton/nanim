@@ -1,2 +1,0 @@
-#!/bin/sh
-java -jar ${NANIM_HOME}/bin/nanimopt-1.0.jar $*

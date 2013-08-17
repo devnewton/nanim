@@ -27,6 +27,7 @@
                 <module>sheet2nanim</module>
 		<module>nanimstudio</module>
                 <module>nimageopt</module>
+                <module>installer</module>
 	</modules>
 </project>
 

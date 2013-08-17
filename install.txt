@@ -1,7 +1,0 @@
-Nanim is a specification and set of development tools, there is no real
-installation procedure, but on unix system, you can use the following setup:
-
-1) copy the sdk folder in /opt/nanim
-2) create the NANIM_HOME environment variable: export NANIM_HOME=/opt/nanim
-3) add ${NANIM_HOME}/bin to your path: export PATH=${PATH}:${NANIM_HOME}/bin
-4) test your setup by going in the ${NANIM_HOME} folder and run the sample script.
