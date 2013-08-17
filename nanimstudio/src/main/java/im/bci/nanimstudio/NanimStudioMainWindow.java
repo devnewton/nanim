@@ -35,7 +35,9 @@ import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
 import im.bci.nanimstudio.tools.ImportSpriteSheetDialog;
 import im.bci.nanimstudio.tools.OptimizeDialog;
+import java.awt.Toolkit;
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -54,6 +56,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
      */
     public NanimStudioMainWindow() {
         nanimStudio = NanimStudioModel.getInstance();
+        setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
         initComponents();
     }
 

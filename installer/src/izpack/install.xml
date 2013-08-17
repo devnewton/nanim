@@ -72,7 +72,7 @@
             
             <file src="../../src/izpack/icon.ico" targetdir="$INSTALL_PATH" />
             <file src="../../../readme.txt" targetdir="$INSTALL_PATH" />
-            <file src="../../src/main/resources/icon.png" targetdir="$INSTALL_PATH" />
+            <file src="../../../nanimstudio/src/main/resources/icon.png" targetdir="$INSTALL_PATH" />
             <file src="../../../license.txt" targetdir="$INSTALL_PATH" />
           
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim-@{project.version}.jar"/>
