@@ -4,13 +4,13 @@
     <groupId>im.bci</groupId>
     <artifactId>nanim-installer</artifactId>
     <packaging>jar</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <name>nanim-installer</name>
     <url>http://devnewton.bci.im</url>
     <parent>
         <groupId>im.bci</groupId>
         <artifactId>nanim</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,12 +20,12 @@
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimstudio</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>font2nanim</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
     <build>
