@@ -34,8 +34,11 @@ package im.bci.nanimstudio;
 import im.bci.nanimstudio.model.Nframe;
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.model.Nanimation;
+import im.bci.nanimstudio.tools.SwingSuxx;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.JSpinner;
+import javax.swing.text.DefaultFormatter;
 
 /**
  *
@@ -71,6 +74,11 @@ public class NframesEditor extends javax.swing.JPanel {
     public NframesEditor() {
         nanimStudio = NanimStudioModel.getInstance();
         initComponents();
+        SwingSuxx.fixJspinner(jSpinner_duration);
+        SwingSuxx.fixJspinner(jSpinner_u1);
+        SwingSuxx.fixJspinner(jSpinner_u2);
+        SwingSuxx.fixJspinner(jSpinner_v1);
+        SwingSuxx.fixJspinner(jSpinner_v2);        
     }
 
     /**

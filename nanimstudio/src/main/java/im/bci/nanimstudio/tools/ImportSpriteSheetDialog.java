@@ -52,6 +52,9 @@ public class ImportSpriteSheetDialog extends javax.swing.JDialog {
     public ImportSpriteSheetDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        SwingSuxx.fixJspinner(jSpinner_frame_width);
+        SwingSuxx.fixJspinner(jSpinner_frame_height);
+        SwingSuxx.fixJspinner(jSpinner_frame_duration);
     }
 
     /**

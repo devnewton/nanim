@@ -71,6 +71,8 @@ public class OptimizeDialog extends javax.swing.JDialog {
     public OptimizeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        SwingSuxx.fixJspinner(jSpinner_possibleWidth);
+        SwingSuxx.fixJspinner(jSpinner_possibleHeight);
     }
 
     /**

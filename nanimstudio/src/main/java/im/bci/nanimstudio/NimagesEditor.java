@@ -72,8 +72,6 @@ public class NimagesEditor extends javax.swing.JPanel {
         jButton_remove = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
         jButton_load = new javax.swing.JButton();
         nimageViewer1 = new im.bci.nanimstudio.NimageViewer();
 
@@ -135,20 +133,6 @@ public class NimagesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         add(jTextField1, gridBagConstraints);
-
-        jLabel2.setText("Format:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        add(jLabel2, gridBagConstraints);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        add(jComboBox1, gridBagConstraints);
 
         jButton_load.setText("change image");
         jButton_load.addActionListener(new java.awt.event.ActionListener() {
@@ -219,9 +203,7 @@ public class NimagesEditor extends javax.swing.JPanel {
     private javax.swing.JButton jButton_add;
     private javax.swing.JButton jButton_load;
     private javax.swing.JButton jButton_remove;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JList jList_images;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
