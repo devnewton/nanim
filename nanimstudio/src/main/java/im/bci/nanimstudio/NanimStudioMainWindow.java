@@ -31,14 +31,15 @@
  */
 package im.bci.nanimstudio;
 
+import im.bci.nanimstudio.model.NanimChangedListener;
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
 import im.bci.nanimstudio.tools.ImportSpriteSheetDialog;
 import im.bci.nanimstudio.tools.OptimizeDialog;
-import java.awt.Toolkit;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -47,8 +48,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class NanimStudioMainWindow extends javax.swing.JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private final NanimStudioModel nanimStudio;
+    private static final long serialVersionUID = 1L;
+    private final NanimStudioModel nanimStudio;
     private File lastFile;
 
     /**
@@ -56,6 +57,15 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
      */
     public NanimStudioMainWindow() {
         nanimStudio = NanimStudioModel.getInstance();
+        nanimStudio.getNanim().addChangedListener(new NanimChangedListener() {
+            @Override
+            public void nanimChanged() {
+                String title = NanimStudioMainWindow.this.getTitle();
+                if (!title.endsWith("*")) {
+                    NanimStudioMainWindow.this.setTitle(title + "*");
+                }
+            }
+        });
         setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
         initComponents();
     }
@@ -90,6 +100,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_exportGIF1 = new javax.swing.JMenuItem();
         jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem_optimize = new javax.swing.JMenuItem();
         jMenuItem_merge_with = new javax.swing.JMenuItem();
@@ -144,6 +155,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
+        jMenuItem_new.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem_new.setText("New");
         jMenuItem_new.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,6 +173,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         fileMenu.add(openMenuItem);
 
+        saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setMnemonic('s');
         saveMenuItem.setText("Save");
         saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -221,6 +234,15 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem_export_png_spritesheet);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Quit");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem1);
+
         menuBar.add(fileMenu);
 
         jMenu1.setText("Tools");
@@ -253,6 +275,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private void jMenuItem_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_newActionPerformed
         nanim.clear();
         lastFile = null;
+        this.setTitle("nanimstudio - new");
     }//GEN-LAST:event_jMenuItem_newActionPerformed
 
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
@@ -262,12 +285,16 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
             nanim.saveAs(chooser.getSelectedFile());
             lastFile = chooser.getSelectedFile();
+            this.setTitle("nanimstudio - " + lastFile.getName());
         }
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         if (null != lastFile) {
             nanim.saveAs(lastFile);
+            this.setTitle("nanimstudio - " + lastFile.getName());
+        } else {
+            saveAsMenuItemActionPerformed(evt);
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
@@ -278,6 +305,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
             nanim.open(chooser.getSelectedFile());
             lastFile = chooser.getSelectedFile();
+            this.setTitle("nanimstudio - " + lastFile.getName());
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
@@ -320,8 +348,8 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_merge_withActionPerformed
 
     private void jMenuItem_import_png_spritesheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_import_png_spritesheetActionPerformed
-       ImportSpriteSheetDialog dialog = new ImportSpriteSheetDialog(this, true);
-       dialog.setVisible(true);
+        ImportSpriteSheetDialog dialog = new ImportSpriteSheetDialog(this, true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_jMenuItem_import_png_spritesheetActionPerformed
 
     private void jMenuItem_exportAPNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exportAPNGActionPerformed
@@ -333,13 +361,22 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_exportAPNGActionPerformed
 
-
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        int confirm = JOptionPane.showOptionDialog(this,
+                "Are You Sure to close nanimstudio?",
+                "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (confirm == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem_exportGIF;
     private javax.swing.JMenuItem jMenuItem_exportGIF1;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
