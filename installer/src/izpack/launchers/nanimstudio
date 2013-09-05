@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar dirname $(dirname $0)/nanimstudio-${nanim_version}.jar $*
+java -jar $(dirname $0)/nanimstudio-${nanim_version}.jar $*
