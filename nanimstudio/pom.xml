@@ -4,7 +4,7 @@
     <groupId>im.bci</groupId>
     <artifactId>nanimstudio</artifactId>
     <packaging>jar</packaging>
-    <version>1.1</version>
+    <version>1.2</version>
     <name>nanimstudio</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -20,22 +20,22 @@
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimparser</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimopt</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimmerge</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>sheet2nanim</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>hu.kazocsaba</groupId>

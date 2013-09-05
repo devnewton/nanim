@@ -4,13 +4,13 @@
     <groupId>im.bci</groupId>
     <artifactId>font2nanim</artifactId>
     <packaging>jar</packaging>
-    <version>1.1</version>
+    <version>1.2</version>
     <name>font2nanim</name>
     <url>http://maven.apache.org</url>
     <parent>
         <groupId>im.bci</groupId>
         <artifactId>nanim</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimparser</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
     </dependencies>
     <build>

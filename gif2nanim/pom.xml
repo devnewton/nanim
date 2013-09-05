@@ -4,7 +4,7 @@
 	<groupId>im.bci</groupId>
 	<artifactId>gif2nanim</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1</version>
+	<version>1.2</version>
 	<name>gif2nanim</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>im.bci</groupId>
 			<artifactId>nanimparser</artifactId>
-			<version>1.1</version>
+			<version>1.2</version>
 		</dependency>
 	</dependencies>
 	<build>
