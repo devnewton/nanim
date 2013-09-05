@@ -105,8 +105,13 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_optimize = new javax.swing.JMenuItem();
         jMenuItem_merge_with = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("nanimstudio");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                onClosing(evt);
+            }
+        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -362,14 +367,12 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_exportAPNGActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        int confirm = JOptionPane.showOptionDialog(this,
-                "Are You Sure to close nanimstudio?",
-                "Exit Confirmation", JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, null, null);
-        if (confirm == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
+        warnOrClose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void onClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onClosing
+        warnOrClose();
+    }//GEN-LAST:event_onClosing
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
@@ -396,4 +399,18 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveMenuItem;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private void warnOrClose() {
+        if (getTitle().endsWith("*")) {
+            int confirm = JOptionPane.showOptionDialog(this,
+                    "Current nanim has unsaved modification. Are You Sure to exit nanimstudio?",
+                    "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if (confirm == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        } else {
+            System.exit(0);
+        }
+    }
 }

@@ -31,6 +31,7 @@
  */
 package im.bci.nanimstudio.model;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -72,10 +73,17 @@ public class Nanimation {
     public Nframe addNewFrame() {
         List<Nframe> oldFrames = frames;
         frames = new ArrayList<Nframe>(frames);
-        Nframe frame = new Nframe();
+        final Nframe frame = new Nframe();
         frame.setIndex(oldFrames.size());
         frames.add(frame);
         propertyChangeSupport.firePropertyChange("frames", oldFrames, frames);
+        frame.addPropertyChangeListener(new PropertyChangeListener() {
+
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                propertyChangeSupport.fireIndexedPropertyChange("frames", frame.getIndex(), null, frame);
+            }
+        });
         return frame;
     }
 

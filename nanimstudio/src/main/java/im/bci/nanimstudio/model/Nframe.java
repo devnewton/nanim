@@ -35,6 +35,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,25 +43,38 @@ import java.util.logging.Logger;
  *
  * @author bob
  */
-public class Nframe implements PropertyChangeListener{
+public class Nframe implements PropertyChangeListener {
 
     private int index;
     private int duration;
     private float u1 = 0f, v1 = 0f, u2 = 1f, v2 = 1f;
     private Nimage nimage;
     private BufferedImage image;
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
 
     public Nimage getNimage() {
         return nimage;
     }
 
     public void setNimage(Nimage nimage) {
-        if(null != nimage) {
+        Nimage oldNimage = this.nimage;
+        if (null != nimage) {
             nimage.removePropertyChangeListener(this);
         }
         this.nimage = nimage;
-        nimage.addPropertyChangeListener(this);
+        if (null != nimage) {
+            nimage.addPropertyChangeListener(this);
+        }
         updateImage();
+        propertyChangeSupport.firePropertyChange("nimage", oldNimage, this.nimage);
     }
 
     public float getU1() {
@@ -68,8 +82,10 @@ public class Nframe implements PropertyChangeListener{
     }
 
     public void setU1(float u1) {
+        float oldU1 = this.u1;
         this.u1 = u1;
         updateImage();
+        propertyChangeSupport.firePropertyChange("u1", oldU1, this.u1);
     }
 
     public float getV1() {
@@ -77,8 +93,10 @@ public class Nframe implements PropertyChangeListener{
     }
 
     public void setV1(float v1) {
+        float oldV1 = this.v1;
         this.v1 = v1;
         updateImage();
+        propertyChangeSupport.firePropertyChange("v1", oldV1, this.v1);
     }
 
     public float getU2() {
@@ -86,8 +104,10 @@ public class Nframe implements PropertyChangeListener{
     }
 
     public void setU2(float u2) {
+        float oldU2 = this.u2;
         this.u2 = u2;
         updateImage();
+        propertyChangeSupport.firePropertyChange("u2", oldU2, this.u2);
     }
 
     public float getV2() {
@@ -95,8 +115,10 @@ public class Nframe implements PropertyChangeListener{
     }
 
     public void setV2(float v2) {
+        float oldV2 = this.v2;
         this.v2 = v2;
         updateImage();
+        propertyChangeSupport.firePropertyChange("v2", oldV2, this.v2);
     }
 
     public int getDuration() {
@@ -104,7 +126,9 @@ public class Nframe implements PropertyChangeListener{
     }
 
     public void setDuration(int duration) {
+        float oldDuration = this.duration;
         this.duration = duration;
+        propertyChangeSupport.firePropertyChange("duration", oldDuration, this.duration);
     }
 
     public int getIndex() {
@@ -112,7 +136,9 @@ public class Nframe implements PropertyChangeListener{
     }
 
     public void setIndex(int index) {
+        float old = this.index;
         this.index = index;
+        propertyChangeSupport.firePropertyChange("index", old, this.index);
     }
 
     public BufferedImage getImage() {
@@ -136,7 +162,7 @@ public class Nframe implements PropertyChangeListener{
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if(nimage == event.getSource() ) {
+        if (nimage == event.getSource()) {
             updateImage();
         }
     }
