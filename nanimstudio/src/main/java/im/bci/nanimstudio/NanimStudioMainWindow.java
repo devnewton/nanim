@@ -31,12 +31,16 @@
  */
 package im.bci.nanimstudio;
 
+import de.ailis.scilter.ScaleFilterFactory;
 import im.bci.nanimstudio.model.NanimChangedListener;
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
 import im.bci.nanimstudio.tools.ImportSpriteSheetDialog;
 import im.bci.nanimstudio.tools.OptimizeDialog;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.Arrays;
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -68,6 +72,17 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
         initComponents();
+        
+                String[] filters = ScaleFilterFactory.getFilterNames();
+        Arrays.sort(filters);
+        for (final String filterName : filters) {
+            jMenu_scale.add(new AbstractAction(filterName) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                   nanimStudio.getNanim().scale(ScaleFilterFactory.createFilter(filterName));
+                }
+            });
+        }
     }
 
     /**
@@ -101,9 +116,10 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        jMenu_Tools = new javax.swing.JMenu();
         jMenuItem_optimize = new javax.swing.JMenuItem();
         jMenuItem_merge_with = new javax.swing.JMenuItem();
+        jMenu_scale = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("nanimstudio");
@@ -250,7 +266,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        jMenu1.setText("Tools");
+        jMenu_Tools.setText("Tools");
 
         jMenuItem_optimize.setText("Optimize");
         jMenuItem_optimize.addActionListener(new java.awt.event.ActionListener() {
@@ -258,7 +274,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
                 jMenuItem_optimizeActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_optimize);
+        jMenu_Tools.add(jMenuItem_optimize);
 
         jMenuItem_merge_with.setText("Merge with...");
         jMenuItem_merge_with.addActionListener(new java.awt.event.ActionListener() {
@@ -266,9 +282,12 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
                 jMenuItem_merge_withActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_merge_with);
+        jMenu_Tools.add(jMenuItem_merge_with);
 
-        menuBar.add(jMenu1);
+        jMenu_scale.setText("Scale");
+        jMenu_Tools.add(jMenu_scale);
+
+        menuBar.add(jMenu_Tools);
 
         setJMenuBar(menuBar);
 
@@ -378,7 +397,6 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem_exportGIF;
     private javax.swing.JMenuItem jMenuItem_exportGIF1;
@@ -388,6 +406,8 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_merge_with;
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuItem jMenuItem_optimize;
+    private javax.swing.JMenu jMenu_Tools;
+    private javax.swing.JMenu jMenu_scale;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menuBar;
     private im.bci.nanimstudio.NframesEditor nFramesEditor1;

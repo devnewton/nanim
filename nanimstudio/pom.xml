@@ -52,6 +52,11 @@
             <artifactId>animated-gif-lib</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>de.ailis.scilter</groupId>
+            <artifactId>scilter</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

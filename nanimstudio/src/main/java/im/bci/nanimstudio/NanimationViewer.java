@@ -31,10 +31,15 @@
  */
 package im.bci.nanimstudio;
 
+import de.ailis.scilter.ScaleFilter;
+import de.ailis.scilter.ScaleFilterFactory;
 import im.bci.nanimstudio.model.Nanimation;
 import im.bci.nanimstudio.model.Nframe;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 /**
@@ -44,6 +49,8 @@ import javax.swing.JPanel;
 public class NanimationViewer extends javax.swing.JPanel {
 
     private Nanimation animation;
+    private ScaleFilter scaleFilter = ScaleFilterFactory.createFilter("normal");
+    private BufferedImage scaledImage;
 
     public Nanimation getAnimation() {
         return animation;
@@ -63,9 +70,12 @@ public class NanimationViewer extends javax.swing.JPanel {
             if (null != animation && !animation.getFrames().isEmpty()) {
                 Nframe currentFrame = getCurrentFrame();
                 BufferedImage image = currentFrame.getImage();
-                if(null != image) {
-                    g.translate(getWidth() / 2 - image.getWidth() / 2, getHeight()/2 - image.getHeight() / 2);
-                    g.drawImage(image, 0, 0, null);
+                if (null != image) {
+                    if (image != scaledImage) {
+                        scaledImage = scaleFilter.scale(image);
+                    }
+                    g.translate(getWidth() / 2 - scaledImage.getWidth() / 2, getHeight() / 2 - scaledImage.getHeight() / 2);
+                    g.drawImage(scaledImage, 0, 0, null);
                 }
             }
         }
@@ -101,7 +111,16 @@ public class NanimationViewer extends javax.swing.JPanel {
         initComponents();
         Thread animator = new Thread((RenderingPanel) jPanel_animation);
         animator.start();
-
+        String[] filters = ScaleFilterFactory.getFilterNames();
+        Arrays.sort(filters);
+        for (final String filterName : filters) {
+            jMenu_zoom.add(new AbstractAction(filterName) {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    NanimationViewer.this.scaleFilter = ScaleFilterFactory.createFilter(filterName);
+                }
+            });
+        }
     }
 
     /**
@@ -114,11 +133,19 @@ public class NanimationViewer extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPopupMenu_animation = new javax.swing.JPopupMenu();
+        jMenu_zoom = new javax.swing.JMenu();
         jPanel_animation = new RenderingPanel();
+
+        jPopupMenu_animation.setComponentPopupMenu(jPopupMenu_animation);
+
+        jMenu_zoom.setText("Zoom");
+        jPopupMenu_animation.add(jMenu_zoom);
 
         setLayout(new java.awt.GridBagLayout());
 
         jPanel_animation.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel_animation.setComponentPopupMenu(jPopupMenu_animation);
 
         javax.swing.GroupLayout jPanel_animationLayout = new javax.swing.GroupLayout(jPanel_animation);
         jPanel_animation.setLayout(jPanel_animationLayout);
@@ -141,6 +168,8 @@ public class NanimationViewer extends javax.swing.JPanel {
         add(jPanel_animation, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu_zoom;
     private javax.swing.JPanel jPanel_animation;
+    private javax.swing.JPopupMenu jPopupMenu_animation;
     // End of variables declaration//GEN-END:variables
 }

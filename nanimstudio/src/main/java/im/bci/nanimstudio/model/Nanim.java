@@ -34,6 +34,7 @@ package im.bci.nanimstudio.model;
 import com.google.protobuf.ByteString;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
+import de.ailis.scilter.ScaleFilter;
 
 import im.bci.NanimMerge;
 import im.bci.Sheet2Nanim;
@@ -473,6 +474,12 @@ public class Nanim {
             loadProtobufNanim(sheet2nanim.getNanim());
         } catch (IOException ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void scale(ScaleFilter filter) {
+        for(Nimage nimage : images) {
+            nimage.setImage(filter.scale(nimage.getImage()));
         }
     }
 }
