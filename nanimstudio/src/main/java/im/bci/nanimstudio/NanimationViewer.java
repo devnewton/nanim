@@ -36,11 +36,16 @@ import de.ailis.scilter.ScaleFilterFactory;
 import im.bci.nanimstudio.model.Nanimation;
 import im.bci.nanimstudio.model.Nframe;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 
 /**
  *
@@ -51,6 +56,28 @@ public class NanimationViewer extends javax.swing.JPanel {
     private Nanimation animation;
     private ScaleFilter scaleFilter = ScaleFilterFactory.createFilter("normal");
     private BufferedImage scaledImage;
+    private Zoomer zoomer = new FixedScaleZoomer(1.0);
+
+    private interface Zoomer {
+
+        void zoom(Graphics g, BufferedImage image);
+    }
+
+    public class FixedScaleZoomer implements Zoomer {
+
+        final double s;
+
+        FixedScaleZoomer(double s) {
+            this.s = s;
+        }
+
+        @Override
+        public void zoom(Graphics g, BufferedImage image) {
+            Graphics2D g2 = ((Graphics2D) g);
+            g2.translate(getWidth() / 2.0 - image.getWidth() * s / 2.0, getHeight() / 2.0 - image.getHeight() * s / 2.0);
+            g2.scale(s, s);
+        }
+    }
 
     public Nanimation getAnimation() {
         return animation;
@@ -67,6 +94,9 @@ public class NanimationViewer extends javax.swing.JPanel {
         @Override
         public void paint(Graphics g) {
             super.paint(g);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, jCheckBoxMenuItem_pixelatedZoom.isSelected() ? RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR : RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
             if (null != animation && !animation.getFrames().isEmpty()) {
                 Nframe currentFrame = getCurrentFrame();
                 BufferedImage image = currentFrame.getImage();
@@ -74,7 +104,7 @@ public class NanimationViewer extends javax.swing.JPanel {
                     if (image != scaledImage) {
                         scaledImage = scaleFilter.scale(image);
                     }
-                    g.translate(getWidth() / 2 - scaledImage.getWidth() / 2, getHeight() / 2 - scaledImage.getHeight() / 2);
+                    zoomer.zoom(g, scaledImage);
                     g.drawImage(scaledImage, 0, 0, null);
                 }
             }
@@ -114,12 +144,29 @@ public class NanimationViewer extends javax.swing.JPanel {
         String[] filters = ScaleFilterFactory.getFilterNames();
         Arrays.sort(filters);
         for (final String filterName : filters) {
-            jMenu_zoom.add(new AbstractAction(filterName) {
+            jMenu_scale.add(new AbstractAction(filterName) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     NanimationViewer.this.scaleFilter = ScaleFilterFactory.createFilter(filterName);
+                    scaledImage = null;
                 }
             });
+        }
+
+        ButtonGroup zoomButtonGroup = new ButtonGroup();
+        for (final double s : Arrays.asList(25.0, 50.0, 100.0, 150.0, 200.0, 300.0, 500.0, 1000.0, 2000.0, 5000.0)) {
+            final JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem();
+            zoomButtonGroup.add(menuItem);
+            menuItem.setAction(new AbstractAction(s + "%") {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    zoomer = new FixedScaleZoomer(s / 100.0);
+                }
+            });
+            if (s == 100.0) {
+                menuItem.setSelected(true);
+            }
+            jMenu_zoom.add(menuItem);
         }
     }
 
@@ -134,13 +181,22 @@ public class NanimationViewer extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPopupMenu_animation = new javax.swing.JPopupMenu();
+        jMenu_scale = new javax.swing.JMenu();
         jMenu_zoom = new javax.swing.JMenu();
+        jCheckBoxMenuItem_pixelatedZoom = new javax.swing.JCheckBoxMenuItem();
         jPanel_animation = new RenderingPanel();
 
         jPopupMenu_animation.setComponentPopupMenu(jPopupMenu_animation);
 
+        jMenu_scale.setText("Scale");
+        jPopupMenu_animation.add(jMenu_scale);
+
         jMenu_zoom.setText("Zoom");
         jPopupMenu_animation.add(jMenu_zoom);
+
+        jCheckBoxMenuItem_pixelatedZoom.setSelected(true);
+        jCheckBoxMenuItem_pixelatedZoom.setText("Pixelated zoom");
+        jPopupMenu_animation.add(jCheckBoxMenuItem_pixelatedZoom);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -168,6 +224,8 @@ public class NanimationViewer extends javax.swing.JPanel {
         add(jPanel_animation, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_pixelatedZoom;
+    private javax.swing.JMenu jMenu_scale;
     private javax.swing.JMenu jMenu_zoom;
     private javax.swing.JPanel jPanel_animation;
     private javax.swing.JPopupMenu jPopupMenu_animation;

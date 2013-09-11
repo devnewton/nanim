@@ -13,11 +13,22 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
+        <Menu class="javax.swing.JMenu" name="jMenu_scale">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Scale"/>
+          </Properties>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu_zoom">
           <Properties>
             <Property name="text" type="java.lang.String" value="Zoom"/>
           </Properties>
         </Menu>
+        <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem_pixelatedZoom">
+          <Properties>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Pixelated zoom"/>
+          </Properties>
+        </MenuItem>
       </SubComponents>
     </Container>
   </NonVisualComponents>

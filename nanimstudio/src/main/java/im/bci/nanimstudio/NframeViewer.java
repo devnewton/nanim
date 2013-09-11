@@ -64,6 +64,7 @@ public class NframeViewer extends javax.swing.JPanel {
         initComponents();
         imageViewer = new ImageViewer();
         imageViewer.setStatusBarVisible(true);
+        imageViewer.setPixelatedZoom(true);
         add(imageViewer.getComponent());
     }
 
