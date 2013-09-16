@@ -40,6 +40,8 @@ import im.bci.nanimstudio.tools.OptimizeDialog;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -54,7 +56,26 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
     private final NanimStudioModel nanimStudio;
-    private File lastFile;
+    private File currentFile;
+    private List<File> lastFiles = new LinkedList<File>() {
+        @Override
+        public boolean add(File o) {
+            remove(o);
+            addFirst(o);
+            while (size() > 5) {
+                super.removeLast();
+            }
+            updateRecentsMenu();
+            StringBuilder sb = new StringBuilder();
+            String separator = "";
+            for (File file : this) {
+                sb.append(separator).append(file.getAbsolutePath());
+                separator = ";";
+            }
+            nanimStudio.getPreferences().put("recentNanims", sb.toString());
+            return true;
+        }
+    };
 
     /**
      * Creates new form NanimStudioMainWindow
@@ -72,17 +93,25 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
         initComponents();
-        
-                String[] filters = ScaleFilterFactory.getFilterNames();
+
+        String[] filters = ScaleFilterFactory.getFilterNames();
         Arrays.sort(filters);
         for (final String filterName : filters) {
             jMenu_scale.add(new AbstractAction(filterName) {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                   nanimStudio.getNanim().scale(ScaleFilterFactory.createFilter(filterName));
+                    nanimStudio.getNanim().scale(ScaleFilterFactory.createFilter(filterName));
                 }
             });
         }
+        for (String recent : nanimStudio.getPreferences().get("recentNanims", "").split(";")) {
+            final File file = new File(recent);
+            if (file.exists()) {
+                lastFiles.add(file);
+            }
+        }
+        updateRecentsMenu();
+
     }
 
     /**
@@ -107,6 +136,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         jMenuItem_new = new javax.swing.JMenuItem();
         openMenuItem = new javax.swing.JMenuItem();
+        jMenu_openRecents = new javax.swing.JMenu();
         saveMenuItem = new javax.swing.JMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -193,6 +223,9 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             }
         });
         fileMenu.add(openMenuItem);
+
+        jMenu_openRecents.setText("Open recents");
+        fileMenu.add(jMenu_openRecents);
 
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setMnemonic('s');
@@ -298,7 +331,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
     private void jMenuItem_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_newActionPerformed
         nanim.clear();
-        lastFile = null;
+        currentFile = null;
         this.setTitle("nanimstudio - new");
     }//GEN-LAST:event_jMenuItem_newActionPerformed
 
@@ -308,15 +341,17 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
             nanim.saveAs(chooser.getSelectedFile());
-            lastFile = chooser.getSelectedFile();
-            this.setTitle("nanimstudio - " + lastFile.getName());
+            currentFile = chooser.getSelectedFile();
+            lastFiles.add(currentFile);
+            this.setTitle("nanimstudio - " + currentFile.getName());
         }
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
-        if (null != lastFile) {
-            nanim.saveAs(lastFile);
-            this.setTitle("nanimstudio - " + lastFile.getName());
+        if (null != currentFile) {
+            nanim.saveAs(currentFile);
+            lastFiles.add(currentFile);
+            this.setTitle("nanimstudio - " + currentFile.getName());
         } else {
             saveAsMenuItemActionPerformed(evt);
         }
@@ -328,8 +363,9 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
             nanim.open(chooser.getSelectedFile());
-            lastFile = chooser.getSelectedFile();
-            this.setTitle("nanimstudio - " + lastFile.getName());
+            currentFile = chooser.getSelectedFile();
+            lastFiles.add(currentFile);
+            this.setTitle("nanimstudio - " + currentFile.getName());
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
@@ -407,6 +443,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuItem jMenuItem_optimize;
     private javax.swing.JMenu jMenu_Tools;
+    private javax.swing.JMenu jMenu_openRecents;
     private javax.swing.JMenu jMenu_scale;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JMenuBar menuBar;
@@ -431,6 +468,23 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             }
         } else {
             System.exit(0);
+        }
+    }
+
+    private void updateRecentsMenu() {
+        jMenu_openRecents.removeAll();
+        for (final File file : lastFiles) {
+            if (file.exists()) {
+                jMenu_openRecents.add(new AbstractAction(file.getAbsolutePath()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        nanim.open(file);
+                        currentFile = file;
+                        lastFiles.add(file);
+                        NanimStudioMainWindow.this.setTitle("nanimstudio - " + currentFile.getName());
+                    }
+                });
+            }
         }
     }
 }
