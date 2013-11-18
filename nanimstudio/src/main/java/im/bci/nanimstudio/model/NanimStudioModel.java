@@ -40,7 +40,7 @@ import java.util.prefs.Preferences;
 public class NanimStudioModel {
     
     private final static NanimStudioModel instance = new NanimStudioModel();  
-    private Nanim nanim = new Nanim();
+    private final Nanim nanim = new Nanim();
     
     public static NanimStudioModel getInstance() {
         return instance;

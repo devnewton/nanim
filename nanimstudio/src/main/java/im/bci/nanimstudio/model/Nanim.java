@@ -44,6 +44,7 @@ import im.bci.apng.PNG.DisposeOp;
 import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParserUtils;
+import im.bci.nanimstudio.tools.NanimFileFilter;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -51,14 +52,15 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPOutputStream;
 
 import javax.imageio.ImageIO;
 
@@ -70,7 +72,7 @@ public class Nanim {
 
     private List<Nanimation> animations = Collections.emptyList();
     private List<Nimage> images = Collections.emptyList();
-    private List<NanimChangedListener> changedListeners = new ArrayList<NanimChangedListener>();
+    private final List<NanimChangedListener> changedListeners = new ArrayList<NanimChangedListener>();
     private final PropertyChangeListener nanimPropertyChangeListener = new PropertyChangeListener() {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
@@ -233,14 +235,7 @@ public class Nanim {
 
     public void saveAs(File file) {
         try {
-            FileOutputStream os = new FileOutputStream(file);
-            try {
-                buildProtobufNanim().writeTo(os);
-                System.out.println("nanim successfully written to " + file.getAbsolutePath());
-            } finally {
-                os.flush();
-                os.close();
-            }
+            NanimParserUtils.writeTo(buildProtobufNanim(), file);
         } catch (IOException ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -287,14 +282,9 @@ public class Nanim {
 
     public void open(File file) {
         try {
-            FileInputStream is = new FileInputStream(file);
-            try {
-                loadProtobufNanim(NanimParser.Nanim.parseFrom(is));
-            } finally {
-                is.close();
-            }
+            loadProtobufNanim(NanimParserUtils.decode(file));
         } catch (IOException ex) {
-            Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Cannot load " + file, ex);
         }
     }
 
@@ -390,7 +380,7 @@ public class Nanim {
             }
             png.write(PNG.createTrailerChunk());
             png.close();
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -478,7 +468,7 @@ public class Nanim {
     }
 
     public void scale(ScaleFilter filter) {
-        for(Nimage nimage : images) {
+        for (Nimage nimage : images) {
             nimage.setImage(filter.scale(nimage.getImage()));
         }
     }

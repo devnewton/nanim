@@ -36,13 +36,16 @@ import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Frame;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
+import im.bci.nanim.NanimParserUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -77,7 +80,7 @@ public class NanimMerge {
         }
 
         for (File inputFile : nanimMerge.inputFiles) {
-            Nanim nanim = decode(inputFile);
+            Nanim nanim = NanimParserUtils.decode(inputFile);
             nanimMerge.merge(nanim);
         }
         nanimMerge.completeMerge();
@@ -86,15 +89,6 @@ public class NanimMerge {
     
     public Nanim getMergedNanim() {
         return mergedNanim.build();
-    }
-
-    private static Nanim decode(File inputFile) throws IOException {
-        FileInputStream is = new FileInputStream(inputFile);
-        try {
-            return NanimParser.Nanim.parseFrom(is);
-        } finally {
-            is.close();
-        }
     }
 
     public void merge(Nanim nanim) {
@@ -163,17 +157,10 @@ public class NanimMerge {
         if(null == outputFile) {
             outputFile = new File("output.nanim");
         }
-        FileOutputStream os = new FileOutputStream(outputFile);
-        try {
-            mergedNanim.build().writeTo(os);
-            System.out.println("nanim successfully written to " + outputFile);
-        } finally {
-            os.flush();
-            os.close();
-        }
+        NanimParserUtils.writeTo(mergedNanim.build(), outputFile);
     }
 
     public void merge(File f) throws IOException {
-        merge(decode(f));
+        merge(NanimParserUtils.decode(f));
     }
 }

@@ -32,12 +32,11 @@
 package im.bci;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Nanim;
-import im.bci.nanim.NanimParser;
+import im.bci.nanim.NanimParserUtils;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -48,7 +47,7 @@ import org.apache.commons.cli.ParseException;
 public class NanimLs {
 
 	private Nanim nanim;
-	private CommandLine commandLine;
+	private final CommandLine commandLine;
 
 	public NanimLs(CommandLine line) {
 		this.commandLine = line;
@@ -72,20 +71,14 @@ public class NanimLs {
 			try {
 				nanimLs.decode(filename.toString());
 				nanimLs.ls();
-			} catch(Exception e) {
+			} catch(IOException e) {
 				System.err.println(e);
 			}
 		}
 	}
 
 	private void decode(String filename) throws IOException {
-		File inputFile = new File(filename);
-		FileInputStream is = new FileInputStream(inputFile);
-		try {
-			nanim = NanimParser.Nanim.parseFrom(is);
-		} finally {
-			is.close();
-		}
+            nanim = NanimParserUtils.decode(new File(filename));
 	}
 
 	private void ls() {

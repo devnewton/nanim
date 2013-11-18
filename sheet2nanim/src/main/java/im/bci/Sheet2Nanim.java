@@ -97,14 +97,7 @@ public class Sheet2Nanim {
     }
 
     private void save() throws IOException {
-        FileOutputStream os = new FileOutputStream(outputFile);
-        try {
-            nanim.writeTo(os);
-            System.out.println("nanim successfully written to " + outputFile);
-        } finally {
-            os.flush();
-            os.close();
-        }
+        NanimParserUtils.writeTo(nanim, outputFile);
     }
 
     public void convert() throws IOException {

@@ -37,7 +37,7 @@ import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 
 public class NanimStudio  {
-	private CommandLine commandLine;
+	private final CommandLine commandLine;
         
 	public NanimStudio(CommandLine line) throws IOException {
 		this.commandLine = line;

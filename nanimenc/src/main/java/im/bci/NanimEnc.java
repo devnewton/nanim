@@ -90,14 +90,7 @@ public class NanimEnc {
 
 	private void save() throws IOException {
 		String output = commandLine.getOptionValue("o", "output.nanim");
-		FileOutputStream os = new FileOutputStream(output);
-		try {
-			nanim.writeTo(os);
-			System.out.println("nanim successfully written to " + output);
-		} finally {
-			os.flush();
-			os.close();
-		}
+                NanimParserUtils.writeTo(nanim, new File(output));
 	}
 
 	private void encode() throws IOException {

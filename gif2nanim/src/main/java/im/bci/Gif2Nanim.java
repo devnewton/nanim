@@ -52,6 +52,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.google.protobuf.ByteString;
+import java.io.File;
 
 public class Gif2Nanim {
 
@@ -104,14 +105,7 @@ public class Gif2Nanim {
 		} else {
 			output = gifFilename.replace(".gif", ".nanim");
 		}
-		FileOutputStream os = new FileOutputStream(output);
-		try {
-			nanim.writeTo(os);
-			System.out.println("nanim successfully written to " + output);
-		} finally {
-			os.flush();
-			os.close();
-		}
+                NanimParserUtils.writeTo(nanim, new File(output));
 	}
 
 	private void encode() throws IOException {

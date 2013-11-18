@@ -31,7 +31,6 @@
  */
 package im.bci;
 
-import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParserUtils;
 import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Frame;
@@ -49,7 +48,6 @@ import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,10 +67,10 @@ import org.apache.commons.cli.ParseException;
 
 public class NanimView extends JFrame {
 	private static final long serialVersionUID = -5634646781822978236L;
-	private CommandLine commandLine;
+	private final CommandLine commandLine;
 	private Nanim nanim;
-	private HashMap<String, BufferedImage> loadedBufferedImages = new HashMap<String, BufferedImage>();
-	private NanimViewPanel viewPanel;
+	private final HashMap<String, BufferedImage> loadedBufferedImages = new HashMap<String, BufferedImage>();
+	private final NanimViewPanel viewPanel;
 
 	class NanimViewPanel extends JPanel implements ActionListener {
 
@@ -126,6 +124,7 @@ public class NanimView extends JFrame {
 			}
 		}
 
+                @Override
 		public void actionPerformed(ActionEvent e) {
 			updateAnimation();
 			repaint();
@@ -241,14 +240,7 @@ public class NanimView extends JFrame {
 	}
 
 	private void decode() throws IOException {
-		File inputFile = new File(commandLine.getArgList().get(0).toString());
-		FileInputStream is = new FileInputStream(inputFile);
-		try {
-			nanim = NanimParser.Nanim.parseFrom(is);
-		} finally {
-			is.close();
-		}
-
+            nanim = NanimParserUtils.decode(new File(commandLine.getArgList().get(0).toString()));
 	}
 
 	private void load() throws IOException {

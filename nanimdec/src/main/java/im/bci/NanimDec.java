@@ -1,13 +1,11 @@
 package im.bci;
 
-import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParserUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -24,7 +22,7 @@ import org.apache.commons.cli.ParseException;
  */
 public class NanimDec 
 {
-    private CommandLine commandLine;
+    private final CommandLine commandLine;
 	private Nanim nanim;
 	private int nbImageDecoded = 0;
 
@@ -52,14 +50,7 @@ public class NanimDec
     }
 	
 	private void decode() throws IOException {
-		File inputFile = new File(commandLine.getArgList().get(0).toString());
-		FileInputStream is = new FileInputStream(inputFile);
-		try {
-			nanim = NanimParser.Nanim.parseFrom(is);
-		} finally {
-			is.close();
-		}
-		
+            nanim = NanimParserUtils.decode(new File(commandLine.getArgList().get(0).toString()));
 	}
 	
 	private void save() throws IOException {

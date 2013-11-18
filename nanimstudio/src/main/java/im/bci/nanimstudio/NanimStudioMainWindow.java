@@ -36,6 +36,7 @@ import im.bci.nanimstudio.model.NanimChangedListener;
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
 import im.bci.nanimstudio.tools.ImportSpriteSheetDialog;
+import im.bci.nanimstudio.tools.NanimFileFilter;
 import im.bci.nanimstudio.tools.OptimizeDialog;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -46,6 +47,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -57,7 +59,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
     private final NanimStudioModel nanimStudio;
     private File currentFile;
-    private List<File> lastFiles = new LinkedList<File>() {
+    private final List<File> lastFiles = new LinkedList<File>() {
         @Override
         public boolean add(File o) {
             remove(o);
@@ -337,7 +339,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
         JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastNanimDirectory", null));
-        chooser.setFileFilter(new FileNameExtensionFilter("nanim animations", "nanim", "nanim"));
+        chooser.setFileFilter(new NanimFileFilter());
         if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
             nanim.saveAs(chooser.getSelectedFile());
@@ -359,7 +361,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
         JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastNanimDirectory", null));
-        chooser.setFileFilter(new FileNameExtensionFilter("nanim animations", "nanim", "nanim"));
+        chooser.setFileFilter(new NanimFileFilter());
         if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());
             nanim.open(chooser.getSelectedFile());
@@ -399,7 +401,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
 
     private void jMenuItem_merge_withActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_merge_withActionPerformed
         JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastNanimDirectory", null));
-        chooser.setFileFilter(new FileNameExtensionFilter("nanim animations", "nanim", "nanim"));
+        chooser.setFileFilter(new NanimFileFilter());
         chooser.setMultiSelectionEnabled(true);
         if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
             nanimStudio.getPreferences().put("lastNanimDirectory", chooser.getCurrentDirectory().getAbsolutePath());

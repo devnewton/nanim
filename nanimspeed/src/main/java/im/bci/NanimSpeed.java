@@ -40,6 +40,7 @@ import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Frame;
 import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParser;
+import im.bci.nanim.NanimParserUtils;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -78,19 +79,9 @@ public class NanimSpeed {
         NanimSpeed nanimSpeed = new NanimSpeed(line);
         for (int i = 0; i < line.getArgList().size(); ++i) {
             String filename = line.getArgList().get(i).toString();
-            Nanim nanim = nanimSpeed.decode(filename);
+            Nanim nanim = NanimParserUtils.decode(new File(filename));
             nanim = nanimSpeed.adjustSpeed(nanim);
             nanimSpeed.save(filename, nanim);
-        }
-    }
-
-    private Nanim decode(String filename) throws IOException {
-        File inputFile = new File(filename);
-        FileInputStream is = new FileInputStream(inputFile);
-        try {
-            return NanimParser.Nanim.parseFrom(is);
-        } finally {
-            is.close();
         }
     }
 
@@ -119,13 +110,6 @@ public class NanimSpeed {
     }
 
     private void save(String filename, Nanim nanim) throws IOException {
-        FileOutputStream os = new FileOutputStream(filename);
-        try {
-            nanim.writeTo(os);
-            System.out.println("nanim successfully written to " + filename);
-        } finally {
-            os.flush();
-            os.close();
-        }
+        NanimParserUtils.writeTo(nanim, new File(filename));
     }
 }

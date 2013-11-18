@@ -123,13 +123,7 @@ public class NanimOpt {
     }
 
     private void save() throws IOException {
-        FileOutputStream os = new FileOutputStream(outputFile);
-        try {
-            outputNanim.writeTo(os);
-            System.out.println("optimized nanim written to " + outputFile);
-        } finally {
-            os.close();
-        }
+        NanimParserUtils.writeTo(outputNanim, outputFile);
     }
 
     public Nanim optimize() {
@@ -256,13 +250,7 @@ public class NanimOpt {
     }
 
     private void decode() throws IOException {
-        FileInputStream is = new FileInputStream(inputFile);
-        try {
-            inputNanim = NanimParser.Nanim.parseFrom(is);
-        } finally {
-            is.close();
-        }
-
+        inputNanim = NanimParserUtils.decode(inputFile);
     }
 
     private List<Dimension> parsePossibleDimensions(List<String> optionValues) {
