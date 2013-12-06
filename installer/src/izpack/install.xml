@@ -40,6 +40,8 @@
     <packs>
         <pack name="Core" required="yes">
             <description>Core installation files</description>
+            <fileset dir="../../target/lib" targetdir="$INSTALL_PATH/lib" override="true" />
+
             <file src="../../../font2nanim/target/font2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />
             <file src="../../../gif2nanim/target/gif2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />
             <file src="../../../nanimenc/target/nanimenc-@{project.version}.jar" targetdir="$INSTALL_PATH" />
@@ -71,9 +73,9 @@
             <file src="../../src/izpack/launchers/nimageopt" targetdir="$INSTALL_PATH" />
             
             <file src="../../src/izpack/icon.ico" targetdir="$INSTALL_PATH" />
-            <file src="../../../readme.txt" targetdir="$INSTALL_PATH" />
+            <file src="../../../README.md" targetdir="$INSTALL_PATH" />
             <file src="../../../nanimstudio/src/main/resources/icon.png" targetdir="$INSTALL_PATH" />
-            <file src="../../../license.txt" targetdir="$INSTALL_PATH" />
+            <file src="../../../LICENSE.md" targetdir="$INSTALL_PATH" />
           
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim-@{project.version}.jar"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/gif2nanim-@{project.version}.jar"/>
