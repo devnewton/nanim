@@ -4,13 +4,12 @@
     <groupId>im.bci</groupId>
     <artifactId>nanimstudio</artifactId>
     <packaging>jar</packaging>
-    <version>1.3</version>
     <name>nanimstudio</name>
     <url>http://maven.apache.org</url>
     <parent>
         <groupId>im.bci</groupId>
         <artifactId>nanim</artifactId>
-        <version>1.3</version>
+        <version>1.4</version>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,47 +19,38 @@
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimparser</artifactId>
-            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimopt</artifactId>
-            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>nanimmerge</artifactId>
-            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
             <artifactId>sheet2nanim</artifactId>
-            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>hu.kazocsaba</groupId>
             <artifactId>image-viewer</artifactId>
-            <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.jdesktop</groupId>
             <artifactId>beansbinding</artifactId>
-            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.madgag</groupId>
             <artifactId>animated-gif-lib</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>de.ailis.scilter</groupId>
             <artifactId>scilter</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
