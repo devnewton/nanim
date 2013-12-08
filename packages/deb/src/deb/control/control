@@ -1,0 +1,9 @@
+Package: nanim
+Version: [[version]]
+Section: graphics
+Priority: optional
+Architecture: all
+Depends: java7-runtime
+Maintainer: devnewton <devnewton@bci.im>
+Description: nanim
+Homepage: http://devnewton.bci.im/softwares/nanim

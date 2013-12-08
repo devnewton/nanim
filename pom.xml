@@ -29,6 +29,7 @@
         <module>nanimstudio</module>
         <module>nimageopt</module>
         <module>packages/generic</module>
+        <module>packages/deb</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -100,11 +101,6 @@
             <dependency>
                 <groupId>im.bci</groupId>
                 <artifactId>font2nanim</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>im.bci</groupId>
-                <artifactId>nimageopt</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
