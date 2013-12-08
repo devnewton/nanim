@@ -10,6 +10,7 @@
         <groupId>im.bci</groupId>
         <artifactId>nanim</artifactId>
         <version>1.4</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,11 +19,55 @@
     <dependencies>
         <dependency>
             <groupId>im.bci</groupId>
+            <artifactId>font2nanim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>gif2nanim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimenc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimdec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimls</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimmerge</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimrename</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimspeed</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimview</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>nanimopt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
+            <artifactId>sheet2nanim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
             <artifactId>nanimstudio</artifactId>
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
-            <artifactId>font2nanim</artifactId>
+            <artifactId>nimageopt</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -39,6 +84,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
+                            <excludeTransitive>false</excludeTransitive>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                         </configuration>
                     </execution>

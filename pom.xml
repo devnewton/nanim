@@ -28,10 +28,50 @@
         <module>sheet2nanim</module>
         <module>nanimstudio</module>
         <module>nimageopt</module>
-        <module>installer</module>
+        <module>packages/generic</module>
     </modules>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>gif2nanim</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanimenc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanimdec</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanimrename</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanimspeed</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanimview</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nimageopt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanimls</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>im.bci</groupId>
                 <artifactId>nanimparser</artifactId>
@@ -60,6 +100,11 @@
             <dependency>
                 <groupId>im.bci</groupId>
                 <artifactId>font2nanim</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nimageopt</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

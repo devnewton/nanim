@@ -40,22 +40,7 @@
     <packs>
         <pack name="Core" required="yes">
             <description>Core installation files</description>
-            <fileset dir="../../target/lib" targetdir="$INSTALL_PATH/lib" override="true" />
-
-            <file src="../../../font2nanim/target/font2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />
-            <file src="../../../gif2nanim/target/gif2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />
-            <file src="../../../nanimenc/target/nanimenc-@{project.version}.jar" targetdir="$INSTALL_PATH" />
-            <file src="../../../nanimdec/target/nanimdec-@{project.version}.jar" targetdir="$INSTALL_PATH" />
-            <file src="../../../nanimls/target/nanimls-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nanimmerge/target/nanimmerge-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nanimrename/target/nanimrename-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nanimspeed/target/nanimspeed-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nanimview/target/nanimview-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nanimopt/target/nanimopt-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../sheet2nanim/target/sheet2nanim-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nimageopt/target/nimageopt-@{project.version}.jar" targetdir="$INSTALL_PATH" />    
-            <file src="../../../nanimstudio/target/nanimstudio-@{project.version}.jar" targetdir="$INSTALL_PATH" />
-            <file src="../../../nimageopt/target/nimageopt-@{project.version}.jar" targetdir="$INSTALL_PATH" />
+            <fileset dir="../../target/lib" targetdir="$INSTALL_PATH" override="true" />
             
             <file src="../../src/izpack/launchers/font2nanim" targetdir="$INSTALL_PATH" />
             <file src="../../src/izpack/launchers/gif2nanim" targetdir="$INSTALL_PATH" />
@@ -73,9 +58,9 @@
             <file src="../../src/izpack/launchers/nimageopt" targetdir="$INSTALL_PATH" />
             
             <file src="../../src/izpack/icon.ico" targetdir="$INSTALL_PATH" />
-            <file src="../../../README.md" targetdir="$INSTALL_PATH" />
-            <file src="../../../nanimstudio/src/main/resources/icon.png" targetdir="$INSTALL_PATH" />
-            <file src="../../../LICENSE.md" targetdir="$INSTALL_PATH" />
+            <file src="../../../../README.md" targetdir="$INSTALL_PATH" />
+            <file src="../../../../nanimstudio/src/main/resources/icon.png" targetdir="$INSTALL_PATH" />
+            <file src="../../../../LICENSE.md" targetdir="$INSTALL_PATH" />
           
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim-@{project.version}.jar"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/gif2nanim-@{project.version}.jar"/>

@@ -38,7 +38,7 @@
                             <mainClass>im.bci.NanimRename</mainClass>
                             <addClasspath>true</addClasspath>
                             <addExtensions>true</addExtensions>
-                            <classpathPrefix>lib/</classpathPrefix>
+                            
                         </manifest>
                     </archive>
                 </configuration>
