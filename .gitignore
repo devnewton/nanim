@@ -16,3 +16,8 @@
 /installer/target/
 /packages/generic/target/
 /packages/deb/target/
+/nbactions.xml
+/packages/win/nanim-installer-1.4.exe
+/packages/win/target/nanim-win-1.4.jar
+/packages/win/nanim-installer-1.4.jar
+/packages/win/target/maven-archiver/pom.properties

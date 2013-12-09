@@ -30,6 +30,7 @@
         <module>nimageopt</module>
         <module>packages/generic</module>
         <module>packages/deb</module>
+        <module>packages/win</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -96,6 +97,11 @@
             <dependency>
                 <groupId>im.bci</groupId>
                 <artifactId>nanimstudio</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanim-installer</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
