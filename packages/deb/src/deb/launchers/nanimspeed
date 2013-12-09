@@ -1,0 +1,3 @@
+#!/bin/sh
+java -jar /opt/nanim/nanimspeed-${nanim_version}.jar $*
+

@@ -1,0 +1,3 @@
+#!/bin/sh
+java -jar /opt/nanim/font2nanim-${nanim_version}.jar $*
+

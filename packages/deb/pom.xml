@@ -9,7 +9,7 @@
     <parent>
         <groupId>im.bci</groupId>
         <artifactId>nanim</artifactId>
-        <version>1.4</version>
+        <version>1.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <properties>
@@ -90,7 +90,7 @@
                                     <outputDirectory>${basedir}/target/launchers</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${basedir}/../generic/src/izpack/launchers</directory>
+                                            <directory>${basedir}/src/deb/launchers</directory>
                                             <filtering>true</filtering>
                                         </resource>
                                     </resources>              
@@ -143,7 +143,7 @@
                                             <type>directory</type>
                                             <mapper>
                                                 <type>perm</type>
-                                                <prefix>/opt/nanim</prefix>
+                                                <prefix>/usr/bin</prefix>
                                                 <filemode>755</filemode>
                                             </mapper>
                                         </data>

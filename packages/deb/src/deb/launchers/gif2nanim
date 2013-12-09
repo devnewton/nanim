@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar /opt/nanim/gif2nanim-${nanim_version}.jar $*
