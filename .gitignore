@@ -20,3 +20,4 @@
 /packages/win/nanim-installer-*.exe
 /packages/win/target/
 /packages/win/nanim-installer*.jar
+/nanimdec/nbactions.xml
