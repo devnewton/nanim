@@ -1,0 +1,2 @@
+#!/bin/sh
+java -jar $(dirname $0)/nanim2json-${nanim_version}.jar $*

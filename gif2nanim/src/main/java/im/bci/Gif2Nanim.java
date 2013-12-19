@@ -87,10 +87,10 @@ public class Gif2Nanim {
 		GnuParser parser = new GnuParser();
 		CommandLine line = parser.parse(options, args);
 
-		Gif2Nanim nanimEnc = new Gif2Nanim(line);
-		nanimEnc.decode();
-		nanimEnc.encode();
-		nanimEnc.save();
+		Gif2Nanim gif2nanim = new Gif2Nanim(line);
+		gif2nanim.decode();
+		gif2nanim.encode();
+		gif2nanim.save();
 	}
 
 	private void decode() throws FileNotFoundException {

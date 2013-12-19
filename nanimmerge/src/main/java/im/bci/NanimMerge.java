@@ -31,21 +31,16 @@
  */
 package im.bci;
 
-import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Animation;
 import im.bci.nanim.NanimParser.Frame;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParserUtils;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;

@@ -44,8 +44,8 @@
             
             <file src="../../src/izpack/launchers/font2nanim" targetdir="$INSTALL_PATH" />
             <file src="../../src/izpack/launchers/gif2nanim" targetdir="$INSTALL_PATH" />
-            <file src="../../src/izpack/launchers/nanimenc" targetdir="$INSTALL_PATH" />
-            <file src="../../src/izpack/launchers/nanimdec" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/json2nanim" targetdir="$INSTALL_PATH" />
+            <file src="../../src/izpack/launchers/nanim2json" targetdir="$INSTALL_PATH" />
             <file src="../../src/izpack/launchers/nanimls" targetdir="$INSTALL_PATH" />    
             <file src="../../src/izpack/launchers/nanimmerge" targetdir="$INSTALL_PATH" />    
             <file src="../../src/izpack/launchers/nanimrename" targetdir="$INSTALL_PATH" />    
@@ -64,8 +64,8 @@
           
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim-@{project.version}.jar"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/gif2nanim-@{project.version}.jar"/>
-            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimenc-@{project.version}.jar"/>
-            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimdec-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/json2nanim-@{project.version}.jar"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanim2json-@{project.version}.jar"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimls-@{project.version}.jar"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimmerge-@{project.version}.jar"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimrename-@{project.version}.jar"/>
@@ -79,8 +79,8 @@
             
             <parsable targetfile="$INSTALL_PATH/font2nanim"/>
             <parsable targetfile="$INSTALL_PATH/gif2nanim"/>
-            <parsable targetfile="$INSTALL_PATH/nanimenc"/>
-            <parsable targetfile="$INSTALL_PATH/nanimdec"/>
+            <parsable targetfile="$INSTALL_PATH/json2nanim"/>
+            <parsable targetfile="$INSTALL_PATH/nanim2json"/>
             <parsable targetfile="$INSTALL_PATH/nanimls"/>
             <parsable targetfile="$INSTALL_PATH/nanimmerge"/>
             <parsable targetfile="$INSTALL_PATH/nanimrename"/>
@@ -94,8 +94,8 @@
             
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/font2nanim"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/gif2nanim"/>
-            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimenc"/>
-            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimdec"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/json2nanim"/>
+            <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanim2json"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimls"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimmerge"/>
             <executable type="bin" stage="never" targetfile="$INSTALL_PATH/nanimrename"/>

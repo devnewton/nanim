@@ -97,9 +97,9 @@ public class Font2Nanim {
         GnuParser parser = new GnuParser();
         CommandLine line = parser.parse(options, args);
 
-        Font2Nanim nanimEnc = new Font2Nanim(line);
-        nanimEnc.encode();
-        nanimEnc.save();
+        Font2Nanim font2nanim = new Font2Nanim(line);
+        font2nanim.encode();
+        font2nanim.save();
     }
 
     private void save() throws IOException {

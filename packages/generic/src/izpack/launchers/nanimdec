@@ -1,2 +1,0 @@
-#!/bin/sh
-java -jar $(dirname $0)/nanimdec-${nanim_version}.jar $*

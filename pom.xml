@@ -17,8 +17,8 @@
         <module>font2nanim</module>
         <module>gif2nanim</module>
         <module>nanimparser</module>
-        <module>nanimenc</module>
-        <module>nanimdec</module>
+        <module>json2nanim</module>
+        <module>nanim2json</module>
         <module>nanimls</module>
         <module>nanimmerge</module>
         <module>nanimrename</module>
@@ -41,12 +41,12 @@
             </dependency>
             <dependency>
                 <groupId>im.bci</groupId>
-                <artifactId>nanimenc</artifactId>
+                <artifactId>json2nanim</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>im.bci</groupId>
-                <artifactId>nanimdec</artifactId>
+                <artifactId>nanim2json</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

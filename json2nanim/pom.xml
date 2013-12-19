@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>im.bci</groupId>
-    <artifactId>nanimenc</artifactId>
+    <artifactId>json2nanim</artifactId>
     <packaging>jar</packaging>
-    <name>nanimenc</name>
+    <name>json2nanim</name>
     <url>http://maven.apache.org</url>
     <parent>
         <groupId>im.bci</groupId>
@@ -39,7 +39,7 @@
                     <archive>
                         <index>false</index>
                         <manifest>
-                            <mainClass>im.bci.NanimEnc</mainClass>
+                            <mainClass>im.bci.JSON2Nanim</mainClass>
                             <addClasspath>true</addClasspath>
                             <addExtensions>true</addExtensions>
                             

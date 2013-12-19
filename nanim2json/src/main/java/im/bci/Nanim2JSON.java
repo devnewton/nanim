@@ -58,7 +58,7 @@ import org.kohsuke.args4j.Option;
  * @author devnewton
  *
  */
-public class NanimDec {
+public class Nanim2JSON {
     
     @Option(name="--output-name", usage="output base name for json data and png images")
     private String outputBaseName;
@@ -73,17 +73,17 @@ public class NanimDec {
     private int nbImageDecoded;
     private final Map<String, File> imageNamesToFiles = new HashMap<String, File>();
     
-    public NanimDec() {
+    public Nanim2JSON() {
     }
-    public NanimDec(Nanim nanim, File outputDir, String outputBaseName) {
+    public Nanim2JSON(Nanim nanim, File outputDir, String outputBaseName) {
         this.outputBaseName = outputBaseName;
         this.outputDir = outputDir;
         this.nanim = nanim;
     }   
 
     public static void main(String[] args) throws IOException {
-        NanimDec nanimDec = new NanimDec();
-        CmdLineParser parser = new CmdLineParser(nanimDec);
+        Nanim2JSON nanim2json = new Nanim2JSON();
+        CmdLineParser parser = new CmdLineParser(nanim2json);
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
@@ -92,8 +92,8 @@ public class NanimDec {
             parser.printUsage(System.err);
             return;
         }
-        nanimDec.decode();
-        nanimDec.save();
+        nanim2json.decode();
+        nanim2json.save();
     }
 
     public void save() throws IOException {

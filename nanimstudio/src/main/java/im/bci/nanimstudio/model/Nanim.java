@@ -35,8 +35,8 @@ import com.google.protobuf.ByteString;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
 import de.ailis.scilter.ScaleFilter;
-import im.bci.NanimDec;
-import im.bci.NanimEnc;
+import im.bci.Nanim2JSON;
+import im.bci.JSON2Nanim;
 
 import im.bci.NanimMerge;
 import im.bci.Sheet2Nanim;
@@ -384,7 +384,7 @@ public class Nanim {
     }
     
     public void openJsonAndPng(File file) {
-        NanimEnc enc = new NanimEnc(file);
+        JSON2Nanim enc = new JSON2Nanim(file);
         try {
             loadProtobufNanim(enc.load());
         } catch (IOException ex) {
@@ -394,7 +394,7 @@ public class Nanim {
     
     public void saveJsonAndPng(File selectedFile) {
         try {
-            NanimDec dec = new NanimDec(buildProtobufNanim(), selectedFile.getParentFile(), selectedFile.getName().replace(".json", ""));
+            Nanim2JSON dec = new Nanim2JSON(buildProtobufNanim(), selectedFile.getParentFile(), selectedFile.getName().replace(".json", ""));
             dec.save();
         } catch (IOException ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);

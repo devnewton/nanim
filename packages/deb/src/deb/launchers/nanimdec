@@ -1,2 +1,0 @@
-#!/bin/sh
-java -jar /opt/nanim/nanimdec-${nanim_version}.jar $*

@@ -22,3 +22,5 @@
 /packages/win/nanim-installer*.jar
 /nanimdec/nbactions.xml
 /nanimenc/nbactions.xml
+/nanim2json/target/
+/json2nanim/target/

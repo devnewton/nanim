@@ -57,7 +57,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-public class NanimEnc {
+public class JSON2Nanim {
 
     @Option(name = "-o", usage = "output file")
     private File outputFile;
@@ -67,27 +67,27 @@ public class NanimEnc {
 
     private Nanim nanim;
 
-    public NanimEnc() {
+    public JSON2Nanim() {
     }
 
-    public NanimEnc(File inputFile) {
+    public JSON2Nanim(File inputFile) {
         this.inputFile = inputFile;
     }
 
     public static void main(String[] args) throws IOException {
-        NanimEnc nanimEnc = new NanimEnc();
-        CmdLineParser parser = new CmdLineParser(nanimEnc);
+        JSON2Nanim json2nanim = new JSON2Nanim();
+        CmdLineParser parser = new CmdLineParser(json2nanim);
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
-            System.err.println("nanimenc [args] foo.json");
+            System.err.println("json2nanim [args] foo.json");
             parser.printUsage(System.err);
             return;
         }
 
-        nanimEnc.loadJson();
-        nanimEnc.save();
+        json2nanim.loadJson();
+        json2nanim.save();
     }
     
     public Nanim load() throws IOException {
