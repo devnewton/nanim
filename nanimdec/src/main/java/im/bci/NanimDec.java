@@ -59,6 +59,9 @@ import org.kohsuke.args4j.Option;
  *
  */
 public class NanimDec {
+    
+    @Option(name="--output-name", usage="output base name for json data and png images")
+    private String outputBaseName;
 
     @Option(name = "-o", usage = "output directory")
     private File outputDir;
@@ -67,8 +70,16 @@ public class NanimDec {
     private File inputFile;
 
     private Nanim nanim;
-    private int nbImageDecoded = 0;
+    private int nbImageDecoded;
     private final Map<String, File> imageNamesToFiles = new HashMap<String, File>();
+    
+    public NanimDec() {
+    }
+    public NanimDec(Nanim nanim, File outputDir, String outputBaseName) {
+        this.outputBaseName = outputBaseName;
+        this.outputDir = outputDir;
+        this.nanim = nanim;
+    }   
 
     public static void main(String[] args) throws IOException {
         NanimDec nanimDec = new NanimDec();
@@ -85,13 +96,12 @@ public class NanimDec {
         nanimDec.save();
     }
 
-    private void decode() throws IOException {
-        nanim = NanimParserUtils.decode(inputFile);
-    }
-
-    private void save() throws IOException {
+    public void save() throws IOException {
         if (null == outputDir) {
             outputDir = inputFile.getParentFile();
+        }
+        if(null == outputBaseName) {
+            outputBaseName = inputFile.getName().replace(".gz", "").replace(".nanim", "");
         }
         for (Image image : nanim.getImagesList()) {
             saveImage(image);
@@ -116,9 +126,9 @@ public class NanimDec {
             if (!imageName.endsWith(".png")) {
                 imageName += ".png";
             }
-            File outputImageFile = new File(outputDir, imageName);
+            File outputImageFile = new File(outputDir, outputBaseName + "_" + imageName);
             if (!isFilenameValid(outputImageFile)) {
-                outputImageFile = new File(outputDir, inputFile.getName().replace(".nanim", "_" + nbImageDecoded++ + ".png"));
+                outputImageFile = new File(outputDir, outputBaseName + nbImageDecoded++ + ".png");
             }
             imageNamesToFiles.put(image.getName(), outputImageFile);
             ImageIO.write(outputImage, "png", outputImageFile);
@@ -163,12 +173,16 @@ public class NanimDec {
         jsonNanim.add("animations", jsonAnimations);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        FileWriter writer = new FileWriter(new File(outputDir, inputFile.getName().replace(".nanim", ".json")));
+        FileWriter writer = new FileWriter(new File(outputDir, outputBaseName + ".json"));
         try {
             gson.toJson(jsonNanim, writer);
         } finally {
             writer.close();
         }
+    }
+
+    private void decode() throws IOException {
+         nanim = NanimParserUtils.decode(inputFile);
     }
 
 }

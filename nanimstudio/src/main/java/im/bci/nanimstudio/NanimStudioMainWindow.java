@@ -145,9 +145,10 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_importGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF1 = new javax.swing.JMenuItem();
+        jMenuItem_exportJsonAndPng = new javax.swing.JMenuItem();
         jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem_quit = new javax.swing.JMenuItem();
         jMenu_Tools = new javax.swing.JMenu();
         jMenuItem_optimize = new javax.swing.JMenuItem();
         jMenuItem_merge_with = new javax.swing.JMenuItem();
@@ -274,6 +275,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem_exportGIF1);
 
+        jMenuItem_exportJsonAndPng.setText("Export JSON and PNG...");
+        jMenuItem_exportJsonAndPng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_exportJsonAndPngActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_exportJsonAndPng);
+
         jMenuItem_import_png_spritesheet.setText("Import PNG spritesheet...");
         jMenuItem_import_png_spritesheet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -290,14 +299,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         });
         fileMenu.add(jMenuItem_export_png_spritesheet);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Quit");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem_quit.setText("Quit");
+        jMenuItem_quit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItem_quitActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem1);
+        fileMenu.add(jMenuItem_quit);
 
         menuBar.add(fileMenu);
 
@@ -423,27 +432,38 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_exportAPNGActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItem_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_quitActionPerformed
         warnOrClose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItem_quitActionPerformed
 
     private void onClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onClosing
         warnOrClose();
     }//GEN-LAST:event_onClosing
+
+    private void jMenuItem_exportJsonAndPngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exportJsonAndPngActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastJsonAndPngDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("json files", "json", "json"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
+            nanimStudio.getPreferences().put("lastJsonAndPngDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.saveJsonAndPng(chooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_jMenuItem_exportJsonAndPngActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem_exportGIF;
     private javax.swing.JMenuItem jMenuItem_exportGIF1;
+    private javax.swing.JMenuItem jMenuItem_exportJsonAndPng;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
     private javax.swing.JMenuItem jMenuItem_import_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_merge_with;
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuItem jMenuItem_optimize;
+    private javax.swing.JMenuItem jMenuItem_quit;
     private javax.swing.JMenu jMenu_Tools;
     private javax.swing.JMenu jMenu_openRecents;
     private javax.swing.JMenu jMenu_scale;

@@ -34,6 +34,10 @@
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
+            <artifactId>nanimdec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>im.bci</groupId>
             <artifactId>sheet2nanim</artifactId>
         </dependency>
         <dependency>
