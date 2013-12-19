@@ -48,10 +48,9 @@ import im.bci.nanim.NanimParserUtils;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
 import org.kohsuke.args4j.Argument;
@@ -67,14 +66,18 @@ public class NanimOpt {
 
     private Nanim inputNanim;
     private Nanim outputNanim;
+    private List<String> size;
+    
     @Option(name = "-debug", usage = "Enable debug mode")
     private boolean debug;
-    @Option(name = "-size", multiValued = true, usage = "Add possible size. Example: 256x256. If none, all possible power of two square size from 16x16 to 1024x1024 will be tried.")
-    private List<String> size;
     @Argument(index = 0, required = true)
     private File inputFile;
     @Argument(index = 1, required=true)
-    private File outputFile;
+    private File outputFile;    
+    @Option(name = "-sizes", usage = "Comma separated list of possible texture size. Example: 256x256,128x128. If none, all possible power of two square size from 16x16 to 1024x1024 will be tried.")
+    public void setSizes(String sizes) {
+        size = Arrays.asList(sizes.split(","));
+    }
 
     public NanimOpt(Nanim inputNanim, boolean debug, List<Dimension> size) {
         this.inputNanim = inputNanim;
@@ -92,11 +95,10 @@ public class NanimOpt {
         NanimOpt nanimOpt = new NanimOpt();
         CmdLineParser parser = new CmdLineParser(nanimOpt);
         try {
-
             parser.parseArgument(args);
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
-            System.err.println("nanimopt [args] input.nanim ouptut.nanim");
+            System.err.println("nanimopt [args] input.nanim output.nanim");
             parser.printUsage(System.err);
             return;
         }

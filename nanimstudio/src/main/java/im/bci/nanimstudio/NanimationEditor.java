@@ -31,8 +31,6 @@
  */
 package im.bci.nanimstudio;
 
-import im.bci.nanim.NanimParser;
-import im.bci.nanimstudio.model.Nanim;
 import im.bci.nanimstudio.model.NanimStudioModel;
 import im.bci.nanimstudio.model.Nanimation;
 import java.util.List;
@@ -174,4 +172,8 @@ public class NanimationEditor extends javax.swing.JPanel {
     private im.bci.nanimstudio.NanimationViewer nanimationViewer1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    void selectFirstAnimation() {
+        this.jList_animations.setSelectedIndex(0);
+    }
 }

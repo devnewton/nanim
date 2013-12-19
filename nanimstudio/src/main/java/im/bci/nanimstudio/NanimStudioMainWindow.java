@@ -47,7 +47,6 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -386,6 +385,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             currentFile = chooser.getSelectedFile();
             lastFiles.add(currentFile);
             this.setTitle("nanimstudio - " + currentFile.getName());
+            nanimationEditor.selectFirstAnimation();
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
@@ -512,6 +512,18 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }
 
+    public void openNanimFile(File inputFile) {
+        inputFile = inputFile.getAbsoluteFile();
+        if (inputFile.exists() && inputFile.isFile()) {
+            nanimStudio.getPreferences().put("lastNanimDirectory", inputFile.getParentFile().getAbsolutePath());
+            nanim.open(inputFile);
+            currentFile = inputFile;
+            lastFiles.add(currentFile);
+            this.setTitle("nanimstudio - " + currentFile.getName());
+            nanimationEditor.selectFirstAnimation();
+        }
+    }
+
     private void updateRecentsMenu() {
         jMenu_openRecents.removeAll();
         for (final File file : lastFiles) {
@@ -523,6 +535,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
                         currentFile = file;
                         lastFiles.add(file);
                         NanimStudioMainWindow.this.setTitle("nanimstudio - " + currentFile.getName());
+                        nanimationEditor.selectFirstAnimation();
                     }
                 });
             }

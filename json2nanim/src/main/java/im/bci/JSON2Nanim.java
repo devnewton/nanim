@@ -62,7 +62,7 @@ public class JSON2Nanim {
     @Option(name = "-o", usage = "output file")
     private File outputFile;
 
-    @Argument(required = true, usage = "input json file")
+    @Argument(required = true, usage = "input json file", metaVar = "foo.json")
     private File inputFile;
 
     private Nanim nanim;

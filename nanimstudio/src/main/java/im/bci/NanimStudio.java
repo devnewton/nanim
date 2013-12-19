@@ -31,22 +31,31 @@
  */
 package im.bci;
 
-
 import im.bci.nanimstudio.NanimStudioMainWindow;
-import java.io.IOException;
-import org.apache.commons.cli.CommandLine;
+import im.bci.nanimstudio.model.NanimStudioModel;
+import java.io.File;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
-public class NanimStudio  {
-	private final CommandLine commandLine;
-        
-	public NanimStudio(CommandLine line) throws IOException {
-		this.commandLine = line;
-	}
-        
-            /**
+public class NanimStudio {
+    
+    @Argument(required = false, metaVar = "foo.nanim")
+    private File inputFile;
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        final NanimStudio nanimStudio = new NanimStudio();
+        CmdLineParser parser = new CmdLineParser(nanimStudio);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            System.err.println(e.getMessage());
+            System.err.println("nanimopt [args] input.nanim output.nanim");
+            parser.printUsage(System.err);
+        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -74,7 +83,11 @@ public class NanimStudio  {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new NanimStudioMainWindow().setVisible(true);
+                NanimStudioMainWindow mainWindow = new NanimStudioMainWindow();
+                mainWindow.setVisible(true);
+                if (null != nanimStudio.inputFile) {
+                    mainWindow.openNanimFile(nanimStudio.inputFile);
+                }
             }
         });
     }

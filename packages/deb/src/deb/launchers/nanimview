@@ -1,3 +1,0 @@
-#!/bin/sh
-java -jar /opt/nanim/nanimview-${nanim_version}.jar $*
-

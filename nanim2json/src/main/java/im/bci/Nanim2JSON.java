@@ -66,7 +66,7 @@ public class Nanim2JSON {
     @Option(name = "-o", usage = "output directory")
     private File outputDir;
 
-    @Argument(required = true, usage = "input nanim file")
+    @Argument(required = true, usage = "input nanim file", metaVar = "foo.nanim")
     private File inputFile;
 
     private Nanim nanim;

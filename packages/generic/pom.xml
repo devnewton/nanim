@@ -51,10 +51,6 @@
         </dependency>
         <dependency>
             <groupId>im.bci</groupId>
-            <artifactId>nanimview</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
             <artifactId>nanimopt</artifactId>
         </dependency>
         <dependency>

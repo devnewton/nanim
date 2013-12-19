@@ -23,7 +23,6 @@
         <module>nanimmerge</module>
         <module>nanimrename</module>
         <module>nanimspeed</module>
-        <module>nanimview</module>
         <module>nanimopt</module>
         <module>sheet2nanim</module>
         <module>nanimstudio</module>
@@ -57,11 +56,6 @@
             <dependency>
                 <groupId>im.bci</groupId>
                 <artifactId>nanimspeed</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>im.bci</groupId>
-                <artifactId>nanimview</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -127,7 +121,7 @@
             <dependency>
                 <groupId>args4j</groupId>
                 <artifactId>args4j</artifactId>
-                <version>2.0.16</version>
+                <version>2.0.26</version>
             </dependency>
             <dependency>
                 <groupId>hu.kazocsaba</groupId>
