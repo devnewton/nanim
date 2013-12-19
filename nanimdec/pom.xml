@@ -24,6 +24,10 @@
             <groupId>im.bci</groupId>
             <artifactId>nanimparser</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

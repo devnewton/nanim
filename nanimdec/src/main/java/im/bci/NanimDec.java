@@ -29,16 +29,23 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package im.bci;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
 import im.bci.nanim.NanimParserUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -61,6 +68,7 @@ public class NanimDec {
 
     private Nanim nanim;
     private int nbImageDecoded = 0;
+    private final Map<String, File> imageNamesToFiles = new HashMap<String, File>();
 
     public static void main(String[] args) throws IOException {
         NanimDec nanimDec = new NanimDec();
@@ -82,12 +90,13 @@ public class NanimDec {
     }
 
     private void save() throws IOException {
-        if(null == outputDir ) {
+        if (null == outputDir) {
             outputDir = inputFile.getParentFile();
         }
         for (Image image : nanim.getImagesList()) {
             saveImage(image);
         }
+        saveJson();
     }
 
     private void saveImage(Image image) throws IOException {
@@ -104,13 +113,14 @@ public class NanimDec {
         }
         if (null != outputImage) {
             String imageName = image.getName();
-            if(!imageName.endsWith(".png")) {
+            if (!imageName.endsWith(".png")) {
                 imageName += ".png";
             }
             File outputImageFile = new File(outputDir, imageName);
             if (!isFilenameValid(outputImageFile)) {
-                outputImageFile = new File(outputDir, "nanim_decoded_" + nbImageDecoded++ + ".png");
+                outputImageFile = new File(outputDir, inputFile.getName().replace(".nanim", "_" + nbImageDecoded++ + ".png"));
             }
+            imageNamesToFiles.put(image.getName(), outputImageFile);
             ImageIO.write(outputImage, "png", outputImageFile);
         }
     }
@@ -121,6 +131,43 @@ public class NanimDec {
             return true;
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    private void saveJson() throws IOException {
+        JsonObject jsonNanim = new JsonObject();
+        if (null != nanim.getAuthor() && !nanim.getAuthor().isEmpty()) {
+            jsonNanim.addProperty("author", nanim.getAuthor());
+        }
+        if (null != nanim.getLicense() && !nanim.getLicense().isEmpty()) {
+            jsonNanim.addProperty("license", nanim.getLicense());
+        }
+        JsonArray jsonAnimations = new JsonArray();
+        for (NanimParser.Animation animation : nanim.getAnimationsList()) {
+            JsonObject jsonAnimation = new JsonObject();
+            jsonAnimation.addProperty("name", animation.getName());
+            JsonArray jsonFrames = new JsonArray();
+            for (NanimParser.Frame frame : animation.getFramesList()) {
+                JsonObject jsonFrame = new JsonObject();
+                jsonFrame.addProperty("duration", frame.getDuration());
+                jsonFrame.addProperty("image", imageNamesToFiles.get(frame.getImageName()).getName());
+                jsonFrame.addProperty("u1", frame.getU1());
+                jsonFrame.addProperty("v1", frame.getV1());
+                jsonFrame.addProperty("u2", frame.getU2());
+                jsonFrame.addProperty("v2", frame.getV2());
+                jsonFrames.add(jsonFrame);
+            }
+            jsonAnimation.add("frames", jsonFrames);
+            jsonAnimations.add(jsonAnimation);
+        }
+        jsonNanim.add("animations", jsonAnimations);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        FileWriter writer = new FileWriter(new File(outputDir, inputFile.getName().replace(".nanim", ".json")));
+        try {
+            gson.toJson(jsonNanim, writer);
+        } finally {
+            writer.close();
         }
     }
 
