@@ -145,6 +145,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_importGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF = new javax.swing.JMenuItem();
         jMenuItem_exportGIF1 = new javax.swing.JMenuItem();
+        jMenuItem_importJsonAndPng = new javax.swing.JMenuItem();
         jMenuItem_exportJsonAndPng = new javax.swing.JMenuItem();
         jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
@@ -274,6 +275,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             }
         });
         fileMenu.add(jMenuItem_exportGIF1);
+
+        jMenuItem_importJsonAndPng.setText("Import JSON and PNG...");
+        jMenuItem_importJsonAndPng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_importJsonAndPngActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_importJsonAndPng);
 
         jMenuItem_exportJsonAndPng.setText("Export JSON and PNG...");
         jMenuItem_exportJsonAndPng.addActionListener(new java.awt.event.ActionListener() {
@@ -449,6 +458,15 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_exportJsonAndPngActionPerformed
 
+    private void jMenuItem_importJsonAndPngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_importJsonAndPngActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastJsonAndPngDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("json files", "json", "json"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showOpenDialog(this)) {
+            nanimStudio.getPreferences().put("lastJsonAndPngDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.openJsonAndPng(chooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_jMenuItem_importJsonAndPngActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
@@ -459,6 +477,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_exportJsonAndPng;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
+    private javax.swing.JMenuItem jMenuItem_importJsonAndPng;
     private javax.swing.JMenuItem jMenuItem_import_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_merge_with;
     private javax.swing.JMenuItem jMenuItem_new;

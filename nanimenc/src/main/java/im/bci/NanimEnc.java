@@ -31,12 +31,12 @@
  */
 package im.bci;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
 
@@ -47,113 +47,109 @@ import im.bci.nanim.NanimParser.Frame;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParserUtils;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
 import com.google.protobuf.ByteString;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 
 public class NanimEnc {
 
-	private Nanim nanim;
-	private CommandLine commandLine;
+    @Option(name = "-o", usage = "output file")
+    private File outputFile;
 
-	public NanimEnc(CommandLine line) {
-		this.commandLine = line;
-	}
+    @Argument(required = true, usage = "input json file")
+    private File inputFile;
 
-	public static void main(String[] args) throws ParseException, IOException {
-		Options options = new Options();
-		options.addOption("a", true, "add animation");
-		options.addOption("d", true, "set next frames duration");
-		options.addOption("f", true, "add frame animation");
-		options.addOption("author", true, "set author metadata");
-		options.addOption("license", true, "set license metadata");
-		options.addOption("o", true, "ouput file name");
+    private Nanim nanim;
 
-		if (args.length == 0) {
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("nanimenc [args]", options);
-			System.out.println("Supported image formats: " + Arrays.toString(ImageIO.getReaderFormatNames()));						
-			return;
-		}
-		GnuParser parser = new GnuParser();
-		CommandLine line = parser.parse(options, args);
+    public NanimEnc() {
+    }
 
-		NanimEnc nanimEnc = new NanimEnc(line);
-		nanimEnc.encode();
-		nanimEnc.save();
-	}
+    public NanimEnc(File inputFile) {
+        this.inputFile = inputFile;
+    }
 
-	private void save() throws IOException {
-		String output = commandLine.getOptionValue("o", "output.nanim");
-                NanimParserUtils.writeTo(nanim, new File(output));
-	}
+    public static void main(String[] args) throws IOException {
+        NanimEnc nanimEnc = new NanimEnc();
+        CmdLineParser parser = new CmdLineParser(nanimEnc);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            System.err.println(e.getMessage());
+            System.err.println("nanimenc [args] foo.json");
+            parser.printUsage(System.err);
+            return;
+        }
 
-	private void encode() throws IOException {
-		Nanim.Builder animationCollectionBuilder = Nanim.newBuilder();
-		Animation.Builder currentAnimationBuilder = null;
-		int currentDuration = 0;
-		LinkedHashMap<String, Image.Builder> images = new LinkedHashMap<String, Image.Builder>();
-		for (Option option : commandLine.getOptions()) {
-			String optName = option.getOpt();
-			if (optName.equals("a")) {
-				if (null != currentAnimationBuilder) {
-					animationCollectionBuilder
-							.addAnimations(currentAnimationBuilder);
-				}
-				currentAnimationBuilder = Animation.newBuilder();
-				currentAnimationBuilder.setName(option.getValue());
-			} else if (optName.equals("d")) {
-				currentDuration = Integer.parseInt(option.getValue());
-			} else if (optName.equals("f")) {
-				if (null != currentAnimationBuilder) {
-					File imageFile = new File(option.getValue());
-					Image.Builder imageBuilder = encodeImage(imageFile);
-					images.put(imageFile.getName(), imageBuilder);
-					Frame.Builder frame = Frame.newBuilder()
-							.setDuration(currentDuration)
-							.setImageName(imageFile.getName()).setU1(0.0f)
-							.setU2(1.0f).setV1(0.0f).setV2(1.0f);
-					currentAnimationBuilder.addFrames(frame);
-				}
-			}
-		}
-		if (null != currentAnimationBuilder) {
-			animationCollectionBuilder.addAnimations(currentAnimationBuilder);
-		}
-		for (Image.Builder image : images.values()) {
-			animationCollectionBuilder.addImages(image);
-		}
-		String author = commandLine.getOptionValue("author");
-		if (null != author)
-			animationCollectionBuilder.setAuthor(author);
-		String license = commandLine.getOptionValue("license");
-		if (null != license)
-			animationCollectionBuilder.setLicense(license);
+        nanimEnc.loadJson();
+        nanimEnc.save();
+    }
+    
+    public Nanim load() throws IOException {
+        loadJson();
+        return nanim;
+    }
 
-		nanim = animationCollectionBuilder.build();
-	}
+    private void save() throws IOException {
+        NanimParserUtils.writeTo(nanim, outputFile);
+    }
 
-	private Image.Builder encodeImage(File imageFile) throws IOException {
-		Image.Builder image = Image.newBuilder();
-		BufferedImage bufferedImage = ImageIO.read(imageFile);
-		image.setName(imageFile.getName());
-		image.setWidth(bufferedImage.getWidth());
-		image.setHeight(bufferedImage.getHeight());
+    private void loadJson() throws FileNotFoundException, IOException {
+        FileReader reader = new FileReader(inputFile);
+        try {
+            Map<String, File> imageNameToFiles = new HashMap<String, File>();
+            JsonObject json = new Gson().fromJson(reader, JsonObject.class);
+            Nanim.Builder nanimBuilder = Nanim.newBuilder();
+            for (JsonElement jsonAnimationElement : json.getAsJsonArray("animations")) {
+                JsonObject jsonAnimation = jsonAnimationElement.getAsJsonObject();
+                final Animation.Builder animationBuilder = Animation.newBuilder();
+                animationBuilder.setName(jsonAnimation.get("name").getAsString());
+                for (JsonElement jsonFrameElement : jsonAnimation.getAsJsonArray("frames")) {
+                    JsonObject jsonFrame = jsonFrameElement.getAsJsonObject();
+                    final Frame.Builder frameBuilder = Frame.newBuilder();
+                    frameBuilder.setDuration(jsonFrame.get("duration").getAsInt());
+                    frameBuilder.setU1(jsonFrame.get("u1").getAsFloat());
+                    frameBuilder.setV1(jsonFrame.get("v1").getAsFloat());
+                    frameBuilder.setU2(jsonFrame.get("u2").getAsFloat());
+                    frameBuilder.setV2(jsonFrame.get("v2").getAsFloat());
+                    final String imageFilename = jsonFrame.get("image").getAsString();
+                    final String imageName = imageFilename.replace(".png", "");
+                    imageNameToFiles.put(imageName, new File(inputFile.getParentFile(), imageFilename));
+                    frameBuilder.setImageName(imageName);
+                    animationBuilder.addFrames(frameBuilder);
+                }
+                nanimBuilder.addAnimations(animationBuilder);
+            }
+            for(Map.Entry<String, File> entry : imageNameToFiles.entrySet()) {
+                nanimBuilder.addImages(encodeImage(entry.getKey(), entry.getValue()));
+            }
+            nanim = nanimBuilder.build();
+        } finally {
+            reader.close();
+        }
+    }
 
-		if (bufferedImage.getColorModel().hasAlpha()) {
-			image.setFormat(PixelFormat.RGBA_8888);
-			image.setPixels(ByteString.copyFrom(NanimParserUtils
-					.getRGBAPixels(bufferedImage)));
-		} else {
-			image.setFormat(PixelFormat.RGB_888);
-			image.setPixels(ByteString.copyFrom(NanimParserUtils
-					.getRGBPixels(bufferedImage)));
-		}
-		return image;
-	}
+    private Image.Builder encodeImage(String imageName, File imageFile) throws IOException {
+        Image.Builder image = Image.newBuilder();
+        BufferedImage bufferedImage = ImageIO.read(imageFile);
+        image.setName(imageName);
+        image.setWidth(bufferedImage.getWidth());
+        image.setHeight(bufferedImage.getHeight());
+
+        if (bufferedImage.getColorModel().hasAlpha()) {
+            image.setFormat(PixelFormat.RGBA_8888);
+            image.setPixels(ByteString.copyFrom(NanimParserUtils
+                    .getRGBAPixels(bufferedImage)));
+        } else {
+            image.setFormat(PixelFormat.RGB_888);
+            image.setPixels(ByteString.copyFrom(NanimParserUtils
+                    .getRGBPixels(bufferedImage)));
+        }
+        return image;
+    }
 }

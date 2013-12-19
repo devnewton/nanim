@@ -36,6 +36,7 @@ import com.madgag.gif.fmsware.AnimatedGifEncoder;
 import com.madgag.gif.fmsware.GifDecoder;
 import de.ailis.scilter.ScaleFilter;
 import im.bci.NanimDec;
+import im.bci.NanimEnc;
 
 import im.bci.NanimMerge;
 import im.bci.Sheet2Nanim;
@@ -335,7 +336,6 @@ public class Nanim {
             nframe.setDuration(decoder.getDelay(i));
             nframe.setNimage(nimage);
         }
-        System.out.println("gif successfully written to " + file.getAbsolutePath());
     }
 
     public void saveGIF(File file) {
@@ -380,6 +380,15 @@ public class Nanim {
             png.close();
         } catch (IOException ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void openJsonAndPng(File file) {
+        NanimEnc enc = new NanimEnc(file);
+        try {
+            loadProtobufNanim(enc.load());
+        } catch (IOException ex) {
+            throw new RuntimeException("Cannot load " + file, ex);
         }
     }
     

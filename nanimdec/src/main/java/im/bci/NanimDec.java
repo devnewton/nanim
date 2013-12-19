@@ -126,7 +126,7 @@ public class NanimDec {
             if (!imageName.endsWith(".png")) {
                 imageName += ".png";
             }
-            File outputImageFile = new File(outputDir, outputBaseName + "_" + imageName);
+            File outputImageFile = new File(outputDir, imageName);
             if (!isFilenameValid(outputImageFile)) {
                 outputImageFile = new File(outputDir, outputBaseName + nbImageDecoded++ + ".png");
             }
