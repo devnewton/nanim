@@ -46,16 +46,16 @@ public class NanimFileFilter extends FileFilter {
             return true;
         }
         String name = f.getName();
-        return name.endsWith(".nanim") || isGzippedFilename(name);
+        return name.endsWith(".nanim") || isCompressedFilename(name);
     }
 
     @Override
     public String getDescription() {
-        return "Animations (*.nanim, *.nanim.gz, *.nanimz)";
+        return "Animations (*.nanim, *.nanim.gz, *.nanimz, *.nanim.bz2, *.nanim.lzma, *.nanim.xz)";
     }
 
-    public static boolean isGzippedFilename(String name) {
-        return name.endsWith(".nanim.gz") || name.endsWith(".nanimz");
+    public static boolean isCompressedFilename(String name) {
+        return name.endsWith(".nanim.gz") || name.endsWith(".nanimz") || name.endsWith(".nanim.bz2") || name.endsWith(".nanim.lzma") || name.endsWith(".nanim.xz");
     }
 
 }

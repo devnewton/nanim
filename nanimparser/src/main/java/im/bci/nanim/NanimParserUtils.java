@@ -14,8 +14,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
 
 public class NanimParserUtils {
 
@@ -95,41 +100,63 @@ public class NanimParserUtils {
         }
     }
 
-    public static boolean isGZipped(File f) throws FileNotFoundException, IOException {
-        RandomAccessFile raf = new RandomAccessFile(f, "r");
-        try {
-            int magic = raf.read() & 0xff | ((raf.read() << 8) & 0xff00);
-            return magic == GZIPInputStream.GZIP_MAGIC;
-        } finally {
-            raf.close();
-        }
-    }
+    private static final CompressorStreamFactory compressorStreamFactory = new CompressorStreamFactory();
 
     public static NanimParser.Nanim decode(File inputFile) throws IOException {
-        boolean gzipped = isGZipped(inputFile);
         InputStream is = new FileInputStream(inputFile);
         try {
-            if (gzipped) {
-                is = new GZIPInputStream(is);
+            String compressionName = getCompressionName(inputFile);
+            if (null != compressionName) {
+                CompressorInputStream cis;
+                cis = compressorStreamFactory.createCompressorInputStream(compressionName, is);
+                try {
+                    return NanimParser.Nanim.parseFrom(cis);
+                } finally {
+                    cis.close();
+                }
+            } else {
+                return NanimParser.Nanim.parseFrom(is);
             }
-            return NanimParser.Nanim.parseFrom(is);
+        } catch (CompressorException e) {
+            throw new IOException(e);
         } finally {
             is.close();
         }
     }
 
     public static void writeTo(NanimParser.Nanim nanim, File file) throws IOException {
-        boolean gzipped = file.getName().endsWith(".gz") || file.getName().endsWith(".nanimz");
         OutputStream os = new FileOutputStream(file);
         try {
-            if (gzipped) {
-                os = new GZIPOutputStream(os);
+            try {
+                String compressionName = getCompressionName(file);
+                if (null != compressionName) {
+                    os = compressorStreamFactory.createCompressorOutputStream(compressionName, os);
+                }
+                nanim.writeTo(os);
+            } catch (CompressorException ex) {
+                Logger.getLogger(NanimParserUtils.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RuntimeException(ex);
             }
-            nanim.writeTo(os);
-            System.out.println("nanim successfully written to " + file.getAbsolutePath());
         } finally {
             os.flush();
             os.close();
         }
+    }
+
+    public static String getCompressionName(File file) {
+        final String name = file.getName();
+        if (name.endsWith(".gz") || file.getName().endsWith(".nanimz")) {
+            return CompressorStreamFactory.GZIP;
+        }
+        if (name.endsWith(".bz2")) {
+            return CompressorStreamFactory.BZIP2;
+        }
+        if (name.endsWith(".xz")) {
+            return CompressorStreamFactory.XZ;
+        }
+        if (name.endsWith(".lzma")) {
+            return CompressorStreamFactory.LZMA;
+        }
+        return null;
     }
 }
