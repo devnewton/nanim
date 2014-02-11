@@ -40,10 +40,7 @@ import im.bci.nanim.NanimParser.PixelFormat;
 import im.bci.nanim.NanimParserUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import javax.imageio.ImageIO;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -53,10 +50,14 @@ import org.kohsuke.args4j.Option;
 public class Sheet2Nanim {
 
     private Nanim nanim;
-    @Option(name = "-w", required = true, usage = "frame width")
-    private int frameWidth;
-    @Option(name = "-h", required = true, usage = "frame height")
-    private int frameHeight;
+    @Option(name = "-s", required = false, usage = "tile spacing")
+    private int spacing = 0;
+    @Option(name = "-m", required = false, usage = "margin")
+    private int margin = 0;
+    @Option(name = "-w", required = true, usage = "tile width")
+    private int tileWidth;
+    @Option(name = "-h", required = true, usage = "tile height")
+    private int tileHeight;
     @Option(name = "-a", usage = "animation name")
     private String animationName = "animation0";
     @Option(name = "-d", usage = "frame duration in ms")
@@ -70,8 +71,8 @@ public class Sheet2Nanim {
     }
 
     public Sheet2Nanim(File inputSpriteSheetFile, int frameWidth, int frameHeight, int frameDuration) {
-        this.frameWidth = frameWidth;
-        this.frameHeight = frameHeight;
+        this.tileWidth = frameWidth;
+        this.tileHeight = frameHeight;
         this.frameDuration = frameDuration;
         this.inputSpriteSheetFile = inputSpriteSheetFile;
     }
@@ -112,11 +113,16 @@ public class Sheet2Nanim {
         nanimBuilder.addImages(image);
         Animation.Builder animation = Animation.newBuilder();
         animation.setName(animationName);
-        float tw = (float) frameWidth / (float) image.getWidth();
-        float th = (float) frameHeight / (float) image.getHeight();
-        for (float v = 0.0f; v < 1.0f; v += th) {
-            for (float u = 0.0f; u < 1.0f; u += tw) {
-                Frame.Builder frame = Frame.newBuilder().setDuration(frameDuration).setImageName(image.getName()).setU1(u).setU2(u + tw).setV1(v).setV2(v + th);
+        final int maxX = image.getWidth() - margin;
+        final int maxY = image.getHeight() - margin;
+        int id = 0;
+        for (int y = margin; y < maxY; y += tileHeight + spacing) {
+            for (int x = margin; x < maxX; x += tileWidth + spacing) {
+                float u1 = x / (float)image.getWidth();
+                float v1= y / (float)image.getHeight();
+                float u2 = (x + tileWidth) / (float)image.getWidth();
+                float v2 = (y + tileHeight) / (float)image.getHeight();
+                Frame.Builder frame = Frame.newBuilder().setDuration(frameDuration).setImageName(image.getName()).setU1(u1).setU2(u2).setV1(v1).setV2(v2);
                 animation.addFrames(frame);
             }
         }
