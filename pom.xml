@@ -25,6 +25,7 @@
         <module>nanimspeed</module>
         <module>nanimopt</module>
         <module>sheet2nanim</module>
+        <module>sheet2sheet</module>
         <module>nanimstudio</module>
         <module>nimageopt</module>
         <module>packages/generic</module>
