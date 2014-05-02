@@ -159,6 +159,14 @@
                 <Property name="text" type="java.lang.String" value="Scale"/>
               </Properties>
             </Menu>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_rename_images_nicely">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Rename images nicely"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_rename_images_nicelyActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>

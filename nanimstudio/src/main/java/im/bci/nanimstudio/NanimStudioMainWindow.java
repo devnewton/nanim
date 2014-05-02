@@ -38,6 +38,7 @@ import im.bci.nanimstudio.tools.GenerateSpriteSheetDialog;
 import im.bci.nanimstudio.tools.ImportSpriteSheetDialog;
 import im.bci.nanimstudio.tools.NanimFileFilter;
 import im.bci.nanimstudio.tools.OptimizeDialog;
+import im.bci.nanimstudio.tools.RenameUtils;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
@@ -153,6 +154,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_optimize = new javax.swing.JMenuItem();
         jMenuItem_merge_with = new javax.swing.JMenuItem();
         jMenu_scale = new javax.swing.JMenu();
+        jMenuItem_rename_images_nicely = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("nanimstudio");
@@ -339,6 +341,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenu_scale.setText("Scale");
         jMenu_Tools.add(jMenu_scale);
 
+        jMenuItem_rename_images_nicely.setText("Rename images nicely");
+        jMenuItem_rename_images_nicely.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_rename_images_nicelyActionPerformed(evt);
+            }
+        });
+        jMenu_Tools.add(jMenuItem_rename_images_nicely);
+
         menuBar.add(jMenu_Tools);
 
         setJMenuBar(menuBar);
@@ -467,6 +477,18 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem_importJsonAndPngActionPerformed
 
+    private void jMenuItem_rename_images_nicelyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_rename_images_nicelyActionPerformed
+        String baseName;
+        if (null != currentFile) {
+            baseName = currentFile.getName();
+            int index = baseName.indexOf(".");
+            baseName = baseName.substring(0, index);
+        } else {
+            baseName = "image";
+        }
+        RenameUtils.renameImagesNicely(baseName, nanim);
+    }//GEN-LAST:event_jMenuItem_rename_images_nicelyActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
@@ -483,6 +505,7 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_new;
     private javax.swing.JMenuItem jMenuItem_optimize;
     private javax.swing.JMenuItem jMenuItem_quit;
+    private javax.swing.JMenuItem jMenuItem_rename_images_nicely;
     private javax.swing.JMenu jMenu_Tools;
     private javax.swing.JMenu jMenu_openRecents;
     private javax.swing.JMenu jMenu_scale;
