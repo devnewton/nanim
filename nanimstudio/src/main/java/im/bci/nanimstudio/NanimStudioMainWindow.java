@@ -147,6 +147,8 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         jMenuItem_exportGIF1 = new javax.swing.JMenuItem();
         jMenuItem_importJsonAndPng = new javax.swing.JMenuItem();
         jMenuItem_exportJsonAndPng = new javax.swing.JMenuItem();
+        jMenuItem_importStarlingXML = new javax.swing.JMenuItem();
+        jMenuItem_exportStarlingXML = new javax.swing.JMenuItem();
         jMenuItem_import_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_export_png_spritesheet = new javax.swing.JMenuItem();
         jMenuItem_quit = new javax.swing.JMenuItem();
@@ -292,6 +294,17 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
             }
         });
         fileMenu.add(jMenuItem_exportJsonAndPng);
+
+        jMenuItem_importStarlingXML.setText("Import Starling XML");
+        fileMenu.add(jMenuItem_importStarlingXML);
+
+        jMenuItem_exportStarlingXML.setText("Export Starling XML");
+        jMenuItem_exportStarlingXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_exportStarlingXMLActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem_exportStarlingXML);
 
         jMenuItem_import_png_spritesheet.setText("Import PNG spritesheet...");
         jMenuItem_import_png_spritesheet.addActionListener(new java.awt.event.ActionListener() {
@@ -489,6 +502,14 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
         RenameUtils.renameImagesNicely(baseName, nanim);
     }//GEN-LAST:event_jMenuItem_rename_images_nicelyActionPerformed
 
+    private void jMenuItem_exportStarlingXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exportStarlingXMLActionPerformed
+        JFileChooser chooser = new JFileChooser(nanimStudio.getPreferences().get("lastStarlingXMLDirectory", null));
+        chooser.setFileFilter(new FileNameExtensionFilter("xml files", "xml", "xml"));
+        if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(this)) {
+            nanimStudio.getPreferences().put("lastStarlingXMLDirectory", chooser.getCurrentDirectory().getAbsolutePath());
+            nanim.saveStarlingXML(chooser.getSelectedFile());
+        }    }//GEN-LAST:event_jMenuItem_exportStarlingXMLActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
@@ -497,9 +518,11 @@ public class NanimStudioMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem_exportGIF;
     private javax.swing.JMenuItem jMenuItem_exportGIF1;
     private javax.swing.JMenuItem jMenuItem_exportJsonAndPng;
+    private javax.swing.JMenuItem jMenuItem_exportStarlingXML;
     private javax.swing.JMenuItem jMenuItem_export_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_importGIF;
     private javax.swing.JMenuItem jMenuItem_importJsonAndPng;
+    private javax.swing.JMenuItem jMenuItem_importStarlingXML;
     private javax.swing.JMenuItem jMenuItem_import_png_spritesheet;
     private javax.swing.JMenuItem jMenuItem_merge_with;
     private javax.swing.JMenuItem jMenuItem_new;

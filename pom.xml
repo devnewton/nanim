@@ -19,6 +19,7 @@
         <module>nanimparser</module>
         <module>json2nanim</module>
         <module>nanim2json</module>
+        <module>nanim2starlingxml</module>
         <module>nanimls</module>
         <module>nanimmerge</module>
         <module>nanimrename</module>
@@ -47,6 +48,11 @@
             <dependency>
                 <groupId>im.bci</groupId>
                 <artifactId>nanim2json</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>im.bci</groupId>
+                <artifactId>nanim2starlingxml</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

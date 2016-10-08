@@ -104,6 +104,19 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_exportJsonAndPngActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_importStarlingXML">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Import Starling XML"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_exportStarlingXML">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Export Starling XML"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem_exportStarlingXMLActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_import_png_spritesheet">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Import PNG spritesheet..."/>

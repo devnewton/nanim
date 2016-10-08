@@ -31,10 +31,6 @@
  */
 package im.bci;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import im.bci.nanim.NanimParser;
 import im.bci.nanim.NanimParser.Image;
 import im.bci.nanim.NanimParser.Nanim;
@@ -42,25 +38,35 @@ import im.bci.nanim.NanimParserUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author devnewton
  *
  */
-public class Nanim2JSON {
-    
-    @Option(name="--output-name", usage="output base name for json data and png images")
+public class Nanim2StarlingXML {
+
+    @Option(name = "--output-name", usage = "output base name for json data and png images")
     private String outputBaseName;
 
     @Option(name = "-o", usage = "output directory")
@@ -71,42 +77,50 @@ public class Nanim2JSON {
 
     private Nanim nanim;
     private int nbImageDecoded;
-    private final Map<String, File> imageNamesToFiles = new HashMap<String, File>();
     
-    public Nanim2JSON() {
+    static class ImageData {
+        File file;
+        int width;
+        int height;
     }
-    public Nanim2JSON(Nanim nanim, File outputDir, String outputBaseName) {
+    
+    private final Map<String, ImageData> imagesData = new HashMap<String, ImageData>();
+
+    public Nanim2StarlingXML() {
+    }
+
+    public Nanim2StarlingXML(Nanim nanim, File outputDir, String outputBaseName) {
         this.outputBaseName = outputBaseName;
         this.outputDir = outputDir;
         this.nanim = nanim;
-    }   
+    }
 
-    public static void main(String[] args) throws IOException {
-        Nanim2JSON nanim2json = new Nanim2JSON();
-        CmdLineParser parser = new CmdLineParser(nanim2json);
+    public static void main(String[] args) throws Exception {
+        Nanim2StarlingXML Nanim2StarlingXML = new Nanim2StarlingXML();
+        CmdLineParser parser = new CmdLineParser(Nanim2StarlingXML);
         try {
             parser.parseArgument(args);
         } catch (CmdLineException e) {
             System.err.println(e.getMessage());
-            System.err.println("nanim2json [args] foo.nanim");
+            System.err.println("nanim2starlingxml [args] foo.nanim");
             parser.printUsage(System.err);
             return;
         }
-        nanim2json.decode();
-        nanim2json.save();
+        Nanim2StarlingXML.decode();
+        Nanim2StarlingXML.save();
     }
 
-    public void save() throws IOException {
+    public void save() throws Exception {
         if (null == outputDir) {
             outputDir = inputFile.getParentFile();
         }
-        if(null == outputBaseName) {
+        if (null == outputBaseName) {
             outputBaseName = inputFile.getName().replace(".gz", "").replace(".nanim", "");
         }
         for (Image image : nanim.getImagesList()) {
             saveImage(image);
         }
-        saveJson();
+        saveXML();
     }
 
     private void saveImage(Image image) throws IOException {
@@ -130,7 +144,11 @@ public class Nanim2JSON {
             if (!isFilenameValid(outputImageFile)) {
                 outputImageFile = new File(outputDir, outputBaseName + nbImageDecoded++ + ".png");
             }
-            imageNamesToFiles.put(image.getName(), outputImageFile);
+            ImageData imageData = new ImageData();
+            imageData.file = outputImageFile;
+            imageData.width = image.getWidth();
+            imageData.height = image.getHeight();
+            imagesData.put(image.getName(), imageData);
             ImageIO.write(outputImage, "png", outputImageFile);
         }
     }
@@ -144,45 +162,48 @@ public class Nanim2JSON {
         }
     }
 
-    private void saveJson() throws IOException {
-        JsonObject jsonNanim = new JsonObject();
-        if (null != nanim.getAuthor() && !nanim.getAuthor().isEmpty()) {
-            jsonNanim.addProperty("author", nanim.getAuthor());
-        }
-        if (null != nanim.getLicense() && !nanim.getLicense().isEmpty()) {
-            jsonNanim.addProperty("license", nanim.getLicense());
-        }
-        JsonArray jsonAnimations = new JsonArray();
-        for (NanimParser.Animation animation : nanim.getAnimationsList()) {
-            JsonObject jsonAnimation = new JsonObject();
-            jsonAnimation.addProperty("name", animation.getName());
-            JsonArray jsonFrames = new JsonArray();
-            for (NanimParser.Frame frame : animation.getFramesList()) {
-                JsonObject jsonFrame = new JsonObject();
-                jsonFrame.addProperty("duration", frame.getDuration());
-                jsonFrame.addProperty("image", imageNamesToFiles.get(frame.getImageName()).getName());
-                jsonFrame.addProperty("u1", frame.getU1());
-                jsonFrame.addProperty("v1", frame.getV1());
-                jsonFrame.addProperty("u2", frame.getU2());
-                jsonFrame.addProperty("v2", frame.getV2());
-                jsonFrames.add(jsonFrame);
+    private void saveXML() throws IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        boolean firstAtlas = true;
+        for (Map.Entry<String, ImageData> image : imagesData.entrySet()) {
+            Document doc = docBuilder.newDocument();
+            Element textureAtlas = doc.createElement("TextureAtlas");
+            doc.appendChild(textureAtlas);
+            textureAtlas.setAttribute("imagePath", image.getValue().file.getName());
+            for (NanimParser.Animation animation : nanim.getAnimationsList()) {
+                for (int f = 0; f < animation.getFramesList().size(); ++f) {
+                    NanimParser.Frame frame = animation.getFramesList().get(f);
+                    if (image.getKey().equals(frame.getImageName())) {
+                        Element subTexture = doc.createElement("SubTexture");
+                        int imageWidth = image.getValue().width;
+                        int imageHeight = image.getValue().height;
+                        subTexture.setAttribute("name", animation.getName() + f);
+                        subTexture.setAttribute("x", String.valueOf((int) (frame.getU1() * imageWidth)));
+                        subTexture.setAttribute("y", String.valueOf((int) (frame.getV1() * imageHeight)));
+                        subTexture.setAttribute("width", String.valueOf((int) ((frame.getU2() - frame.getU1()) * imageWidth)));
+                        subTexture.setAttribute("height", String.valueOf((int) ((frame.getV2() - frame.getV1()) * imageWidth)));
+                        textureAtlas.appendChild(subTexture);
+                    }
+                }
             }
-            jsonAnimation.add("frames", jsonFrames);
-            jsonAnimations.add(jsonAnimation);
-        }
-        jsonNanim.add("animations", jsonAnimations);
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        FileWriter writer = new FileWriter(new File(outputDir, outputBaseName + ".json"));
-        try {
-            gson.toJson(jsonNanim, writer);
-        } finally {
-            writer.close();
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(doc);
+                String filename;
+                if(firstAtlas) {
+                    filename = outputBaseName + ".xml";
+                    firstAtlas = false;
+                } else {
+                    filename = outputBaseName + "_"  + image.getKey() + ".xml";
+                }
+		StreamResult result = new StreamResult(new File(outputDir, filename));
+		transformer.transform(source, result);
         }
     }
 
     private void decode() throws IOException {
-         nanim = NanimParserUtils.decode(inputFile);
+        nanim = NanimParserUtils.decode(inputFile);
     }
 
 }

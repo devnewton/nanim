@@ -37,6 +37,7 @@ import com.madgag.gif.fmsware.GifDecoder;
 import de.ailis.scilter.ScaleFilter;
 import im.bci.Nanim2JSON;
 import im.bci.JSON2Nanim;
+import im.bci.Nanim2StarlingXML;
 
 import im.bci.NanimMerge;
 import im.bci.Sheet2Nanim;
@@ -382,7 +383,7 @@ public class Nanim {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void openJsonAndPng(File file) {
         JSON2Nanim enc = new JSON2Nanim(file);
         try {
@@ -391,12 +392,21 @@ public class Nanim {
             throw new RuntimeException("Cannot load " + file, ex);
         }
     }
-    
+
     public void saveJsonAndPng(File selectedFile) {
         try {
-            Nanim2JSON dec = new Nanim2JSON(buildProtobufNanim(), selectedFile.getParentFile(), selectedFile.getName().replace(".json", ""));
-            dec.save();
+            Nanim2JSON enc = new Nanim2JSON(buildProtobufNanim(), selectedFile.getParentFile(), selectedFile.getName().replace(".json", ""));
+            enc.save();
         } catch (IOException ex) {
+            Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void saveStarlingXML(File selectedFile) {
+        try {
+            Nanim2StarlingXML enc = new Nanim2StarlingXML(buildProtobufNanim(), selectedFile.getParentFile(), selectedFile.getName().replace(".xml", ""));
+            enc.save();
+        } catch (Exception ex) {
             Logger.getLogger(Nanim.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

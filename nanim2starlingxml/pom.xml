@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>im.bci</groupId>
-    <artifactId>nanimstudio</artifactId>
+    <artifactId>nanim2starlingxml</artifactId>
     <packaging>jar</packaging>
-    <name>nanimstudio</name>
+    <name>nanim2starlingxml</name>
     <url>http://maven.apache.org</url>
     <parent>
         <groupId>im.bci</groupId>
@@ -24,46 +24,6 @@
             <groupId>im.bci</groupId>
             <artifactId>nanimparser</artifactId>
         </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
-            <artifactId>nanimopt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
-            <artifactId>nanimmerge</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
-            <artifactId>nanim2json</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
-            <artifactId>nanim2starlingxml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
-            <artifactId>json2nanim</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>im.bci</groupId>
-            <artifactId>sheet2nanim</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>hu.kazocsaba</groupId>
-            <artifactId>image-viewer</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jdesktop</groupId>
-            <artifactId>beansbinding</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.madgag</groupId>
-            <artifactId>animated-gif-lib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.ailis.scilter</groupId>
-            <artifactId>scilter</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -75,13 +35,13 @@
                     <archive>
                         <index>false</index>
                         <manifest>
-                            <mainClass>im.bci.NanimStudio</mainClass>
+                            <mainClass>im.bci.nanim2starlingxml</mainClass>
                             <addClasspath>true</addClasspath>
                             <addExtensions>true</addExtensions>
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
+            </plugin> 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
