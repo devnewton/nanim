@@ -37,9 +37,6 @@ import im.bci.nanimstudio.model.Nanimation;
 import im.bci.nanimstudio.tools.SwingSuxx;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.JSpinner;
-import javax.swing.text.DefaultFormatter;
-
 /**
  *
  * @author bob
@@ -74,11 +71,16 @@ public class NframesEditor extends javax.swing.JPanel {
     public NframesEditor() {
         nanimStudio = NanimStudioModel.getInstance();
         initComponents();
+                SwingSuxx.setPreciseJSpinner(jSpinner_u1);
+        SwingSuxx.setPreciseJSpinner(jSpinner_u2);
+        SwingSuxx.setPreciseJSpinner(jSpinner_v1);
+        SwingSuxx.setPreciseJSpinner(jSpinner_v2);   
         SwingSuxx.fixJspinner(jSpinner_duration);
         SwingSuxx.fixJspinner(jSpinner_u1);
         SwingSuxx.fixJspinner(jSpinner_u2);
         SwingSuxx.fixJspinner(jSpinner_v1);
         SwingSuxx.fixJspinner(jSpinner_v2);        
+ 
     }
 
     /**
@@ -170,7 +172,7 @@ public class NframesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridy = 4;
         add(jLabel2, gridBagConstraints);
 
-        jSpinner_u1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        jSpinner_u1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.001f)));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList_frames, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.u1}"), jSpinner_u1, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
@@ -184,9 +186,10 @@ public class NframesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         add(jSpinner_u1, gridBagConstraints);
 
-        jSpinner_v1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        jSpinner_v1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.001f)));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList_frames, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.v1}"), jSpinner_v1, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
@@ -200,6 +203,7 @@ public class NframesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         add(jSpinner_v1, gridBagConstraints);
 
         jLabel3.setText("(u2,v2):");
@@ -208,7 +212,7 @@ public class NframesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridy = 5;
         add(jLabel3, gridBagConstraints);
 
-        jSpinner_u2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        jSpinner_u2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.001f)));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList_frames, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.u2}"), jSpinner_u2, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
@@ -222,9 +226,10 @@ public class NframesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         add(jSpinner_u2, gridBagConstraints);
 
-        jSpinner_v2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.1f)));
+        jSpinner_v2.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.001f)));
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList_frames, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.v2}"), jSpinner_v2, org.jdesktop.beansbinding.BeanProperty.create("value"));
         bindingGroup.addBinding(binding);
@@ -238,6 +243,7 @@ public class NframesEditor extends javax.swing.JPanel {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         add(jSpinner_v2, gridBagConstraints);
 
         eLProperty = org.jdesktop.beansbinding.ELProperty.create("${images}");

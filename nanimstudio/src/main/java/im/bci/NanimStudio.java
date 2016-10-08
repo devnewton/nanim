@@ -32,7 +32,6 @@
 package im.bci;
 
 import im.bci.nanimstudio.NanimStudioMainWindow;
-import im.bci.nanimstudio.model.NanimStudioModel;
 import java.io.File;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
